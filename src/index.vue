@@ -857,10 +857,7 @@
 					_this.SystemData.dataContent[item-1].active=true;
 
 				})
-				if(_this.choiceSystem.ID==2){
-					//console.log('getAllLocksData')
-					_this.$store.commit('getAllLocksData');
-				}
+
 				_this.$store.commit('getAllCarsData');
 			});
 			//刷新返回首页

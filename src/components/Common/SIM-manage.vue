@@ -738,7 +738,7 @@
     }
     @media (min-width:1300px) and (max-width:1599px){
     	.midSim .el-dialog--small {
-		    width: 48%;
+		    width: 52%;
 		} 
     }
     @media (min-width:1200px) and (max-width:1299px){

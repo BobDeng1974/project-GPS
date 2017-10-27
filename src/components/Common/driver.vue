@@ -867,7 +867,7 @@
     }
     @media (min-width:1300px) and (max-width:1599px){
     	.midDriver .el-dialog--small {
-		    width: 48%;
+		    width: 50%;
 		} 
     }
     @media (min-width:1200px) and (max-width:1299px){

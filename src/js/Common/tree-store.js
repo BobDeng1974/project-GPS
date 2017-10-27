@@ -156,7 +156,10 @@ export default class TreeStore {
             if (searchOptions.useEnglish) {
 				//大小写模糊查询
 				if(node.label==null) return false;
-                return node.label.toLowerCase().indexOf(val.toLowerCase()) !== -1
+				let a=false,b=false;
+				if(node.subLabel&&node.subLabel!='') a=node.subLabel.toLowerCase().indexOf(val.toLowerCase()) !== -1;
+                b=node.label.toLowerCase().indexOf(val.toLowerCase()) !== -1;
+				if(a || b) return true
             } else {
                 return this.toPinYin(node.label, searchOptions.useInitial).indexOf(this.toPinYin(keyworld.toLowerCase(), searchOptions.useInitial, true)) !== -1
             }

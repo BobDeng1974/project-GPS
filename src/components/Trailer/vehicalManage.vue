@@ -9,7 +9,7 @@
              <tr>
                <td colspan="2" rowspan="3" width="30%">
                  <!-- <img style='border:1px solid #ccc;display:inline-block;width:209px;height:117px;'></img> -->
-                  <img v-if="imageUrl3" :src="imageUrl3"  style='border:1px solid #ccc;display:inline-block;width:209px;height:117px;'> 
+                  <img v-if="imageUrl3" :src="imageUrl3"  style='border:1px solid #ccc;display:inline-block;width:209px;height:117px;'>
                   <img v-else  src='/static/img/details.png' style='border:1px solid #ccc;display:inline-block;width:209px;height:117px;'></img>
                </td>
                <td>_司机_:</td>
@@ -18,7 +18,7 @@
                <td width="18%">{{detail.FVehicleGroupFullName}}</td>
              </tr>
              <tr>
-     
+
                <td>_发动机号_:</td>
                <td>{{detail.FEngineNumber}}</td>
                <td>_车辆类型_:</td>
@@ -91,7 +91,7 @@
                <td colspan="5" style='word-wrap:break-word'>{{detail.FDescription}}</td>
              </tr>
            </tbody>
-       </table> 
+       </table>
 <!--        <template>
           <el-row :gutter="10">
             <div style='display:inline-block;width:209px;height:117px;position:absolute;left:20px'>
@@ -135,7 +135,7 @@
         </template>
         <template>
           <el-row :gutter="20">
-            <el-col :span="8"><div class="grid-content"><span class="labelCheck" style='width:100px'>_自编号_:</span><span class='check'>{{detail.FVehicleSerialCode}}</span></div></el-col> 
+            <el-col :span="8"><div class="grid-content"><span class="labelCheck" style='width:100px'>_自编号_:</span><span class='check'>{{detail.FVehicleSerialCode}}</span></div></el-col>
             <el-col :span="8"><div class="grid-content"><span class="labelCheck">_车辆购买日期_:</span><span class='check'>{{detail.FPurchaseDate}}</span></div></el-col>
             <el-col :span="8"><div class="grid-content"><span class="labelCheck">_注册日期_:</span><span class='check'>{{detail.FRegisDate}}</span></div></el-col>
           </el-row>
@@ -149,8 +149,8 @@
         </template>
         <template>
           <el-row :gutter="20">
-            <el-col :span="8"><div class="grid-content"><span class="labelCheck" style='width:100px'>_设备号_:</span><span class='check'>{{detail.FAssetID}}</span></div></el-col> 
-            <el-col :span="8"><div class="grid-content"><span class="labelCheck">_所属公司_:</span><span class='check'>{{detail.FShortName}}</span></div></el-col> 
+            <el-col :span="8"><div class="grid-content"><span class="labelCheck" style='width:100px'>_设备号_:</span><span class='check'>{{detail.FAssetID}}</span></div></el-col>
+            <el-col :span="8"><div class="grid-content"><span class="labelCheck">_所属公司_:</span><span class='check'>{{detail.FShortName}}</span></div></el-col>
             <el-col :span="8"><div class="grid-content"><span class="labelCheck">_技术登记有效期_:</span><span class='check'>{{detail.FTechRegDate}}</span></div></el-col>
           </el-row>
         </template>
@@ -164,7 +164,7 @@
         <template>
           <el-row :gutter="20">
            <el-col :span="8"><div class="grid-content"><span class="labelCheck" style='width:100px'>_燃油类型_:</span><span class='check'>{{detail.FFuelType}}</span></div>
-           </el-col> 
+           </el-col>
             <el-col :span="8">
               <div class="grid-content">
                 <span class="labelCheck" >_最大砼容量_(m³):</span>
@@ -233,7 +233,7 @@
       </el-dialog>
     </div>
     <!-- 选择设备1-->
-    <div class='sma'> 
+    <div class='sma'>
       <el-dialog title="_设备列表_" :visible.sync="equipdialog" >
         <div>
           <div class='searchtable'>
@@ -383,18 +383,18 @@
                 <!-- <el-input v-model="objDetail.FVehicleGroupFullName" @focus="motoQuery" class='hoverCursor'></el-input> -->
                 <el-input v-model="objDetail.FVehicleGroupFullName" @focus="motodialog=true" class='hoverCursor'></el-input>
               </el-form-item>
-              
+
               <el-form-item label="_司机_" prop="FDriverName"  >
                 <!-- <el-input v-model="objDetail.FDriverName" @focus="driverQuery('true')" class='hoverCursor'></el-input> -->
                 <el-input v-model="objDetail.FDriverName" @focus="driverView" class='hoverCursor'></el-input>
               </el-form-item>
-              
+
               <el-form-item label="_车辆颜色_" prop="FColorRGB" >
                 <el-select v-model="objDetail.FColorRGB" placeholder="_请选择_">
                   <el-option v-for="item in FColorRGBs" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
-              
+
               <el-form-item label="_百公里油耗_(L)" prop="FFuelConsume">
                 <el-input v-model="objDetail.FFuelConsume"></el-input>
               </el-form-item>
@@ -493,7 +493,7 @@
                   :on-progress='onprogress'
                   :data="{FAction:'FileUpload',FVersion:'1.0.0',FTokenID:'f4b204b4-2f7e-4700-bf3a-bd3b3ff258ca'}">
                   <img v-if="imageUrl" :src="imageUrl" class="avatar" >
-                   <i v-else class="el-icon-plus avatar-uploader-icon" ></i> 
+                   <i v-else class="el-icon-plus avatar-uploader-icon" ></i>
                   <!-- <img v-else src='/static/img/plus.PNG' /> -->
                 </el-upload>
               </el-form-item>
@@ -517,7 +517,7 @@
               <div v-if='view'>
                 <el-form-item label="_保险公司_" prop="FInsuCompany" label-width="130px">
                  <el-input v-model="ruleForm.FInsuCompany"></el-input>
-                </el-form-item>  
+                </el-form-item>
                 <el-form-item label="_保险日期_" prop="FInsuDate" label-width="130px">
                 <el-date-picker type="date" placeholder="_选择日期_" v-model="ruleForm.FInsuDate" style="width: 100%;"></el-date-picker>
                 </el-form-item>
@@ -543,11 +543,11 @@
                  <!--  <el-input v-model="ruleForm.FVehicleGroupFullName" @focus="motoQuery" class='hoverCursor'></el-input> -->
                   <el-input v-model="ruleForm.FVehicleGroupFullName" @focus="motodialog=true" class='hoverCursor'></el-input>
               </el-form-item>
-              
+
               <el-form-item label="_司机_" prop="FDriverName"  >
                   <el-input v-model="ruleForm.FDriverName" @focus="driverView" class='hoverCursor'></el-input>
               </el-form-item>
-              
+
               <el-form-item label="_车辆颜色_" prop="FColorRGB" >
                   <el-select v-model="ruleForm.FColorRGB" placeholder="_请选择_">
                     <el-option v-for="item in FColorRGBs" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -566,7 +566,7 @@
                                  </div> -->
               </div>
               <div v-if='view'>
-                
+
                 <el-form-item label="_车身长度_(m)" prop="FLength">
                <el-input v-model.number="ruleForm.FLength"></el-input>
               </el-form-item>
@@ -604,7 +604,7 @@
                     <el-option v-for="item in FFuelTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
                   </el-select>
                 </el-form-item>
-               
+
               <el-form-item label="_车辆购买日期_" prop="FPurchaseDate">
                 <el-date-picker type="date" placeholder="_选择日期_" v-model="ruleForm.FPurchaseDate" style="width: 100%;"></el-date-picker>
               </el-form-item>
@@ -650,6 +650,7 @@
             class="filter-tree"
             :data="data3"
             :props="defaultProps"
+            :highlight-current="true"
             default-expand-all
             :expand-on-click-node="false"
             :filter-node-method="filterNode"
@@ -703,7 +704,7 @@
               width="80">
             </el-table-column>
             <el-table-column
-              
+
               label="_操作_"
               width="90">
               <template scope="scope">
@@ -999,13 +1000,13 @@
         PageIndex:1,
         PageSize:20,
         total:0,
-        SystemID:null,//系统id 
+        SystemID:null,//系统id
         //搜索未使用设备
         equipdialog:false,
         PageIndex1:1,
         PageSize1:15,
         total1:0,
-        equipSearch:{  
+        equipSearch:{
           FKey:'',
           FType:''
         },
@@ -1031,6 +1032,7 @@
         total4:0,
         motoKey:'',
         motoData:[],
+        FVehicleGroupGUIDs:null
       };
     },
     mounted(){
@@ -1058,8 +1060,7 @@
         this.$store.commit('getAllCarsData', setData)
       }
       function setData() {
-        _this.data3 = _this.$store.state.allCarsData;
-        console.log(_this.data3)
+        _this.data3 = _this.$store.state.allCarTeam;
       }
       this.queryCarList("")
     },
@@ -1067,7 +1068,7 @@
 
     },
     components: {
-     
+
     },
     methods: {
       moreDetail(){
@@ -1108,7 +1109,6 @@
                     <i class="fa fa-flag-checkered icon" v-show={data.id.indexOf("@C")!=-1}></i>
                     <i class="fa fa-truck icon" v-show={data.id.indexOf("@B")==-1&data.id.indexOf("@A")==-1&data.id.indexOf("@C")==-1}></i>
                     {node.label}
-                    <span v-show={data.id.indexOf("@B")!=-1||data.id.indexOf("@A")!=-1||data.id.indexOf("@C")!=-1} style="font-weight:bold">[{data.count}]</span>
                     <span style="margin-left:10px" v-show={data.id.indexOf("@B")==-1&data.id.indexOf("@A")==-1&data.id.indexOf("@C")==-1}>({data.deviceId})</span>
                   </span>
                 )
@@ -1118,7 +1118,23 @@
         return data.label.indexOf(value) !== -1;
       },
       handleNodeClick(data){
-        this.queryCarList(data.label)
+        let teamArr=[];
+        function findCarTeam(data) {
+          if(data.id.indexOf("@C")!=-1){
+            teamArr.push(data.id.replace(/@C/ig,''))
+          }
+          if(data.children.length){
+            for(let i=0;i<data.children.length;i++){
+              findCarTeam(data.children[i])
+            }
+          }else {
+            return
+          }
+        }
+        findCarTeam(data);
+        this.FVehicleGroupGUIDs=teamArr.join(',');
+        this.PageIndex=1;
+        this.loadCarList()
       },
       filterNode3(value, data) {
         if (!value) return true;
@@ -1155,12 +1171,20 @@
       },
       /*Pagination*/
       handleSizeChange(val) {
-        _this.PageSize=val
-        _this.queryCarList("")
+        _this.PageSize=val;
+        if(this.FVehicleGroupGUIDs!=null){
+          this.loadCarList()
+        }else {
+          _this.queryCarList("")
+        }
       },
       handleCurrentChange(val) {
         this.PageIndex=val
-        this.queryCarList("")
+        if(this.FVehicleGroupGUIDs!=null){
+          this.loadCarList()
+        }else {
+          _this.queryCarList("")
+        }
       },
       handleSizeChange1(val) {
         this.PageSize1=val;
@@ -1194,6 +1218,36 @@
           arrFGUID.push(obj.FGUID);
         })
         this.FGUIDs = arrFGUID.join(',');
+      },
+      //点击树形节点查询车辆列表
+      loadCarList(){
+        $.ajax({
+          "url": "/web/Common/Common_Admin",
+          "cache": false,
+          "async": true,
+          "type": "post",
+          "dataType": "json",
+          "contentType": "application/json; charset=utf-8",
+          "data": '{"FTokenID":"' + _this.$store.state.FTokenID + '","FAction":"QueryAdminVehicleListByVehicleGroupGUID","FVehicleGroupGUIDs":"'+_this.FVehicleGroupGUIDs+'","FKey":"","FPageSize":"'+_this.PageSize+'","FPageIndex":"'+_this.PageIndex+'","FVersion":"1.0.0","FSystemType":"' + _this.SystemID + '"}',
+          success: function (json) {
+            console.log(json);
+            _this.total=json.FObject.Table[0].FTotalCount
+            _this.tableData3=json.FObject.Table1
+            $.each( _this.tableData3,function (index,obj) {
+              obj.FStatus=obj.FStatus?true:false
+              obj.FCreateTime=_this.parseGMT(obj.FCreateTime.replace(/T/ig,' '));
+              obj.FVehicleTypeID=obj.FVehicleTypeID=='0'?'_厢车_':obj.FVehicleTypeID=='1'?'_罐车_':obj.FVehicleTypeID=='2'?'_其他_':'_其他_';
+              obj.FColorRGB=obj.FColorRGB=='0'?'_红_':obj.FColorRGB=='1'?'_黄_':obj.FColorRGB=='2'?'_蓝_':obj.FColorRGB=='3'?'_橙_':obj.FColorRGB=='4'?'_紫_':obj.FColorRGB=='5'?'_绿_':obj.FColorRGB=='6'?'_其他_':'其他';
+              obj.FSIMNumber=obj.FSIMNumber?obj.FSIMNumber:'--';
+              obj.FDescription=obj.FDescription?obj.FDescription:'--';
+              obj.FDriverName=obj.FDriverName?obj.FDriverName:'--';
+              obj.FAssetID=obj.FAssetID?obj.FAssetID:'--';
+            })
+          },
+          error:function () {
+
+          }
+        })
       },
       //查询车辆列表
       queryCarList(key){
@@ -1296,7 +1350,7 @@
             if(rows==undefined){  //点击多选删除
               if(this.multipleSelection.length == 0){
                   _this.message('_请先勾选_', 'warning');
-              }else{        
+              }else{
                  Fgid=_this.FGUIDs;
               }
             }else{              //点击单选删
@@ -1344,7 +1398,8 @@
           }
       },
       reload:function () {
-        this.queryCarList("")
+        this.queryCarList("");
+        this.FVehicleGroupGUIDs=null
       },
       toggleSelection(rows) {
         this.$refs.multipleTable.clearSelection();
@@ -1508,10 +1563,10 @@
               if(obj.FStatus){
                 _this.motoArr.push(obj.FGUID);
               }else{
-               
+
               }
             });
-        
+
             function transTreeData(items) {
                 if (items.length > 0) {
                   var curPid =null //pid=0，为最上层节点 ，即无父节点
@@ -1577,7 +1632,7 @@
             this.objDetail.FAgentGUID=row.FGUID;
             this.companydialog=false;
           }
-        }    
+        }
       },
       //新增车辆
       submitForm(formName) {
@@ -1624,7 +1679,7 @@
                 console.log('_请求失败_')
               }
             });
-          } 
+          }
           else {
             console.log('error submit!!');
             return false;
@@ -1692,7 +1747,7 @@
                 console.log('_请求失败_')
               }
             });
-          } 
+          }
           else {
             console.log('error submit!!');
             return false;
@@ -1734,7 +1789,7 @@
               }
               //alert(_this.driverArr.indexOf(Fobj.FObject[0].FAdminDriverGUID)!==-1)
               //原司机存在且被禁掉
-              setTimeout(function(){  
+              setTimeout(function(){
                 if(Fobj.FObject[0].FAdminDriverGUID){   //绑过
                   if(_this.driverArr.indexOf(Fobj.FObject[0].FAdminDriverGUID)!==-1){  //绑过且正常,避免反复启禁
                     _this.objDetail.FDriverName=Fobj.FObject[0].FDriverName;
@@ -1746,7 +1801,7 @@
                   }
                 }
                 else{                                                                    //没绑过或删除绑定
-                  
+
                 }
                  /* if((_this.equipArr.length>=1)&&_this.equipArr.indexOf(Fobj.FObject[0].FAssetID)==-1&&(_this.handObj.FAssetID!=='--')){
                       _this.message('_原设备已禁用或删除_,_请重新选择_','info');
@@ -1771,7 +1826,7 @@
                   _this.objDetail.FAssetID='';
                   _this.objDetail.FAssetGUID='';
               }else{                                     //未绑定或者绑定的卡已被删除
-                 
+
               }
               console.log('_this.driverArr',_this.driverArr);
             },
@@ -1819,7 +1874,7 @@
             console.log('_请求失败_')
           }
         });
-        
+
       },
       //重置
       res(){
@@ -1976,7 +2031,7 @@
   .searchtable{
     height:40px;
     margin:-18px 0 0 0;
-  } 
+  }
 
   .searchtable .searchinput{
     display: inline-block;
@@ -2136,5 +2191,5 @@
 }
 .large .el-dialog__body{
   padding:30px 0  5px 0;
-} 
+}
 </style>

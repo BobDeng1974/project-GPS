@@ -14,10 +14,11 @@
 				<input type="checkbox" class="check" v-model='item.checked' @change="handlecheckedChange(item)"
 					   v-if="options.showCheckbox && options.halfCheckedStatus  &&  !item.nodeSelectNotAll"/>
 			</div>
-			<i class="fa" :class="{'fa-home fa-lg':getIconType(item)===1,
-								   'fa-building':getIconType(item)===2,
-								   'fa-flag-checkered':getIconType(item)===3,
-								   'fa-truck':getIconType(item)===4}"></i>
+			<i class="fa" :class="{'fa-home fa-2x':getIconType(item)===1,
+								   'fa-building fa-lg':getIconType(item)===2,
+								   'fa-flag-checkered fa-lg':getIconType(item)===3,
+								   'fa-truck':getIconType(item)===4,
+			                       'fa-lock fa-lg':getIconType(item)===5}"></i>
 			<span @click="handleNode(item)" :class="{'node-selected':(item.checked && !options.showCheckbox) || item.searched }">
 				<span class="txt-label" :class="{'txt-company':item.rootType=='1','txt-carTeam':item.rootType=='2'}">{{item.label}}</span>
 
@@ -100,10 +101,11 @@
 			//获得图标类型
 			getIconType(obj){
 				let id = obj.id;
-				if (id.indexOf("@A") != -1) return 1
-				if (id.indexOf("@B") != -1) return 2
-				if (id.indexOf("@C") != -1) return 3
-				if (id.indexOf("@A") === -1 && id.indexOf("@B") === -1 && id.indexOf("@C") === -1) return 4
+				if (id.indexOf("@A") != -1) return 1;
+				if (id.indexOf("@B") != -1) return 2;
+				if (id.indexOf("@C") != -1) return 3;
+				if (obj.iconType==0 && id.indexOf("@A") === -1 && id.indexOf("@B") === -1 && id.indexOf("@C") === -1) return 4;
+				if (obj.iconType==1 && id.indexOf("@A") === -1 && id.indexOf("@B") === -1 && id.indexOf("@C") === -1) return 5;
 			},
 			checkFirfox(){
 				let u = navigator.userAgent

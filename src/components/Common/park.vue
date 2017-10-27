@@ -666,7 +666,7 @@ a<template>
                       obj.FParkingStartDateTime='--';
                       obj.FParkingEndDateTime='--';
                       obj.FCount=0;
-                      obj.FParkingDuration='--';
+                      obj.FParkingDuration=0;
                       _this.tableData3.push(obj);
                     }
                   })

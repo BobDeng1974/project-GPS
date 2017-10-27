@@ -154,10 +154,10 @@
 					    <el-col :span='24'>
 							<el-form-item label="_系统权限_"  prop="FHaveSystemIds"  >
 								<el-checkbox-group v-model="oneUserData.FHaveSystemIds">
-								   	<el-checkbox label='1' name="FHaveSystemIds" v-if="(sysHave.indexOf('1')!==-1)||(sysHave.indexOf('0')!==-1)">_接甩挂系统_</el-checkbox>
-								   	<el-checkbox label='2' name="FHaveSystemIds" v-if="(sysHave.indexOf('2')!==-1)||(sysHave.indexOf('0')!==-1)">_电子锁系统_</el-checkbox>
+								   	<el-checkbox label='1' name="FHaveSystemIds" v-if="(sysHave.indexOf('1')!==-1)||(sysHave.indexOf('0')!==-1)">_接甩挂_</el-checkbox>
+								   	<el-checkbox label='2' name="FHaveSystemIds" v-if="(sysHave.indexOf('2')!==-1)||(sysHave.indexOf('0')!==-1)">_智能电子锁_</el-checkbox>
 								   	<!-- <el-checkbox label='3' name="FHaveSystemIds">_冷链系统_</el-checkbox> -->
-								   	<el-checkbox label='4' name="FHaveSystemIds" v-if="(sysHave.indexOf('4')!==-1)||(sysHave.indexOf('0')!==-1)">_车队系统_</el-checkbox>
+								   	<el-checkbox label='4' name="FHaveSystemIds" v-if="(sysHave.indexOf('4')!==-1)||(sysHave.indexOf('0')!==-1)">_车队管理_</el-checkbox>
 								</el-checkbox-group>
 							</el-form-item>
 					    </el-col>
@@ -1428,17 +1428,17 @@
 					for (let i=0; i<newval.length;i++) {
 						if (newval[i] == 1) {
 							temp.val = newval[i];
-							temp.name = "_接甩挂系统_";
+							temp.name = "_接甩挂_";
 							this.FDefaultSystemIds.push(temp);
 						}
 						if (newval[i] == 2) {
 							temp2.val = newval[i];
-							temp2.name = "_电子锁系统_";
+							temp2.name = "_智能电子锁_";
 							this.FDefaultSystemIds.push(temp2);
 						}
 						if (newval[i] == 4) {
 							temp4.val = newval[i];
-							temp4.name = "_车队系统_";
+							temp4.name = "_车队管理_";
 							this.FDefaultSystemIds.push(temp4);
 						}
 						
@@ -1572,12 +1572,12 @@
     }
     @media (min-width:1300px) and (max-width:1599px){
     	.midUser .el-dialog--small {
-		    width: 54%;
+		    width: 58%;
 		} 
     }
     @media (min-width:1200px) and (max-width:1299px){
     	.midUser .el-dialog--small {
-		    width: 55%;
+		    width: 58%;
 		} 
     }
     @media (max-width:1199px) {

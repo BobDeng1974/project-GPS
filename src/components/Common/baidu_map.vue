@@ -1541,8 +1541,10 @@
 			},
 			//清除实时车辆图标和文字
 			deleteLately(){
-				this.removeOverlay(this.latelyArr);
-				this.MarkerClusterer.clearMarkers();
+				if(this.latelyArr.length!=0){
+					this.removeOverlay(this.latelyArr);
+					this.MarkerClusterer.clearMarkers();
+				}
 			},
 			//跳转历史回放
 			linkHistorical(obj){

@@ -19,7 +19,7 @@
 						</el-input>
 						<el-tree
 							class="filter-tree"
-							:data="data"
+							:data="noLockVehicle"
 							:highlight-current="true"
 							:props="defaultProps"
 							default-expand-all
@@ -31,16 +31,16 @@
 							 style="height: 300px;width: 270px;position: absolute;top: 30px;display: none;padding-top: 50px">
 							<p style="color: #cccccc;font-size: 40px;margin-left: 110px;"><i
 								class="el-icon-warning"></i></p>
-							<p style="text-indent: 10px;padding: 10px;">没有您输入的车辆，请前往车辆管理新增车辆</p>
+							<p style="text-indent: 10px;padding: 10px;">_没有您输入的车辆_，_请前往车辆管理新增车辆_</p>
 							<button @click="sendLink({	tabsText: '_车辆管理_',router: 'vehicalmanage'},'')"
 									style="background: white;border:1px solid #1a70ce;color:#1a70ce;width: 120px;height: 26px;margin-top: 30px;margin-left: 80px;"
-									data-dismiss="modal"><i class="el-icon-plus">新增车辆</i></button>
+									data-dismiss="modal"><i class="el-icon-plus">_新增车辆_</i></button>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary " data-dismiss="modal" @click="bingVehicle">确认
+						<button type="button" class="btn btn-primary " data-dismiss="modal" @click="bingVehicle">_确认_
 						</button>
-						<button type="button" class="btn btn-primary " data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-primary " data-dismiss="modal">_取消_</button>
 					</div>
 				</div>
 			</div>
@@ -51,8 +51,8 @@
 				   :fa-data="[mapToolShow,isShowAreaSearch]"></baidu-map>
 		<!--锁图标-->
 		<div class="lockBtns" v-if="systemID==2">
-			<button class="unlockBtn" @click="handleLockStatus(1)"><i class="fa fa-unlock"></i></button>
-			<button class="lockBtn" @click="handleLockStatus(0)"><i class="fa fa-lock"></i></button>
+			<button class="unlockBtn" @click="handleLockStatus(1)" title="_只选择开锁设备_"><i class="fa fa-unlock"></i></button>
+			<button class="lockBtn" @click="handleLockStatus(0)" title="_只选择上锁设备_"><i class="fa fa-lock"></i></button>
 		</div>
 		<!--右侧选择车辆-->
 		<div id="select-car"
@@ -63,7 +63,7 @@
 			<car-tree v-if="systemID!=2" ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
 					  @choiceCarId="handlecheckedChange" @node-click="handlecheckedChange"></car-tree>
 			<!--电子锁车辆列表-->
-			<car-tree v-if="systemID==2" ref='tree' :treeData="lockData" :options="options" @refresh="loadTreeData"
+			<car-tree v-if="systemID==2" ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
 					  @choiceCarId="handlecheckedChange" @node-click="handlecheckedChange"></car-tree>
 
 			<!--<div class="carTeamList" v-if="systemID==2">
@@ -466,7 +466,8 @@
 												<i slot="reference" class="img-icon lock-state" :class="{'normal-lock':!item.FLockStatus&&item.attitude<=1,
 													'abnormal-lock':!item.FLockStatus&&item.attitude>1,
 													'normal-unlock':item.FLockStatus&&item.attitude<=1,
-													'abnormal-unlock':item.FLockStatus&&item.attitude>1}"></i>
+													'abnormal-unlock':item.FLockStatus&&item.attitude>1}"
+													:title="item.FLockStatus?'_开锁_':'_上锁_'"></i>
 
 												<div class="text-center">
 													<img  v-if="item.attitude!=0" :src="'/static/img/pose/pose'+item.attitude+'.png'">
@@ -980,12 +981,8 @@
 								</tbody>
 								</tbody>
 							</table>
-
-
 						</div>
 					</div>
-
-
 				</div>
 			</div>
 		</div>
@@ -1048,35 +1045,30 @@
 						customFilter: null // 自定义节点过滤函数
 					}
 				},
-				//树形图列表所有车辆容器
-				allCarsArr: [],
-				//显示信息使用容器
-				showDataList: [],
-				//所选车辆信息
-				allCarData: [],
-				//运行车辆信息
-				runCarData: [],
-				//停车车辆信息
-				stopCarData: [],
-				//报警车辆信息
-				alarmCarData: [],
-				//离线车辆信息
-				outlineCarData: [],
-				alarmFatigue: [],//疲劳驾驶报警
-				alarmOverSpeed: [],//超速报警
-				alarmOffsetRoad: [],//道路偏移报警
-				alarmTemperature: [],//温度报警
-				alarmFLockRope: [],//绳锁是否异常
-				FAlarmLowPower: [],//低电量报警
+
+				allCarsArr: [],     //树形图列表所有车辆容器
+				noLockVehicle: [],  //电子锁系统 未绑定电子锁车辆数据容器
+				showDataList: [],    //显示信息使用容器
+				allCarData: [],      //所选车辆信息
+				runCarData: [],      //运行车辆信息
+				stopCarData: [],     //停车车辆信息
+				alarmCarData: [],     //报警车辆信息
+				outlineCarData: [],   //离线车辆信息
+				alarmFatigue: [],     //疲劳驾驶报警
+				alarmOverSpeed: [],   //超速报警
+				alarmOffsetRoad: [],  //道路偏移报警
+				alarmTemperature: [], //温度报警
+				alarmFLockRope: [],   //绳锁是否异常
+				FAlarmLowPower: [],   //低电量报警
 				unCoverBack:[],        //后盖打开
 		        longTimeOpened:[],     //长时间未锁
-				fivePasswordError:[],  //五次输入错误
-				illegalCard:[],        //刷非法卡
-				forbiddenAreaOpen:[],  //禁区开锁
-				searchCarName: "",//搜索车辆关键字
-				intervalGetData: null,//定时器对象
-				carIdArr: [], //车辆id数组
-				carDataType: 0, //记录下部菜单列表选择项类型
+				fivePasswordError:[],   //五次输入错误
+				illegalCard:[],         //刷非法卡
+				forbiddenAreaOpen:[],   //禁区开锁
+				searchCarName: "",      //搜索车辆关键字
+				intervalGetData: null,  //定时器对象
+				carIdArr: [],            //车辆id数组
+				carDataType: 0,          //记录下部菜单列表选择项类型
 				remoteUnlockLimits:this.$store.state.remoteUnlockLimits   //开锁权限
 
 
@@ -1137,12 +1129,12 @@
 			}
 			//加载树形图
 			this.loadTreeData();
-      let oldValue=_this.$store.state.allLocksData;
+      let oldValue=_this.$store.state.mapLocksData;
       setInterval(function () {
-        if(_this.$store.state.allLocksData!=oldValue){
-          console.log(_this.$store.state.allLocksData)
-          _this.lockData=_this.$store.state.allLocksData;
-          oldValue=_this.$store.state.allLocksData;
+        if(_this.$store.state.mapLocksData!=oldValue){
+          console.log(_this.$store.state.mapLocksData)
+          _this.lockData=_this.$store.state.mapLocksData;
+          oldValue=_this.$store.state.mapLocksData;
         }
       },1000)
 
@@ -1158,12 +1150,9 @@
 			screenHeight () {
 				this.adjustPage()
 			},
-			filterText(val) {
-				this.$refs.tree2.filter(val);
-			},
 			filterText1(val) {
 				this.$refs.tree1.filter(val);
-			},
+			}
 		},
 		methods: {
 
@@ -1223,24 +1212,35 @@
 			},
 			//调取车辆信息
 			loadTreeData(refresh) {
+/*
 				if (this.systemID == 2) {
-					_this.lockData = _this.deepCopy(_this.$store.state.allLocksData);
+					_this.lockData = _this.deepCopy(_this.$store.state.mapLocksData);
 					console.log(_this.lockData);
 					_this.data = _this.deepCopy(_this.$store.state.allCarsData);
 					_this.allCarsArr = _this.$store.state.allLockList;
 				} else {
-					if (this.$store.state.allCarsList != null && refresh != true) {
-						setData()
-					} else {
-						_this.$store.commit('getAllCarsData', setData)
-					}
+
+				}
+*/
+
+				if (this.$store.state.allCarsList != null && refresh != true) {
+					setData()
+				} else {
+					_this.$store.commit('getAllCarsData', setData);
+
 				}
 				function setData() {
 					//console.log(2222)
 					if (_this.$store.state.allCarsList.length == 0) {
 						_this.$refs.map.showError("_暂无车辆数据_");
 					}
-					_this.allCarsArr = _this.$store.state.allCarsList;
+					if (_this.systemID == 2){
+						_this.allCarsArr = _this.$store.state.allLockList;
+						_this.noLockVehicle = _this.$store.state.noLockVehicle;
+					}else {
+						_this.allCarsArr = _this.$store.state.allCarsList;
+					}
+
 					_this.treeData = _this.deepCopy(_this.$store.state.allCarsData);
 
 				}
@@ -1308,6 +1308,7 @@
 
 			},
 			//请求选中车辆数据（电子锁）
+/*
 			getCheckChange(){
 				_this.carIdArr = [];
 				let nodeArr = this.$refs.tree2.getCheckedNodes();
@@ -1349,6 +1350,14 @@
 				}, _this.refreshInterva)
 
 			},
+*/
+
+			//在当前选择车辆的范围内 根据开锁和上锁状态 过滤设备
+			handleLockStatus(status){
+
+			},
+
+
 			handleCheckChange(){
 				let fn = _this.getCheckChange;
 				clearTimeout(fn.timeoutId);
@@ -1558,6 +1567,7 @@
 								idArr.map(function (item, index) {
 									for (var i = 0; i < _this.allCarsArr.length; i++) {
 										var obj = _this.allCarsArr[i];
+
 										if (obj.FAssetGUID == item) {
 											let outlineCar = {
 												ID: obj.FAssetID,
@@ -1798,7 +1808,7 @@
 									}
 								})
 							}
-							console.log(_this.allCarData);
+							//console.log(_this.allCarData);
 							_this.showDataList = [];
 							switch (_this.carDataType) {
 								case 0: //全部数据
@@ -2088,15 +2098,15 @@
 					return data.FAssetID.indexOf(value) !== -1;
 				}
 			},
+
+*/
+			//车辆绑定列表 过滤规则
 			filterNode1(value, data) {
 				if (!value) {
 					return true;
 				}
 				return data.label.indexOf(value) !== -1;
 			},
-*/
-
-
 
 
 		},
@@ -2107,7 +2117,7 @@
 				return shoppingList.filter(function (item) {
 					let a=false,b=false;
 					if(item.name!='' && item.name!=null && item.name.toUpperCase().indexOf(name.toUpperCase()) != -1) a=true;
-					if(item.assetID.toUpperCase().indexOf(name.toUpperCase()) != -1) b=true;
+					if(item.assetID && item.assetID.toUpperCase().indexOf(name.toUpperCase()) != -1) b=true;
 					if(a || b) return true;
 				});
 			}
@@ -2219,8 +2229,6 @@
 				}
 			}
 		}
-
-
 	}
 </script>
 <style scoped>

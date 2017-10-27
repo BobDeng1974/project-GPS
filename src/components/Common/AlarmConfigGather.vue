@@ -1972,7 +1972,7 @@
 	}
 	 .save-config-data{
     position:absolute;
-      bottom:90px;
+      bottom:120px;
    /*   border:1px solid red;*/
   } 
 	.el-table .el-button{
@@ -2048,7 +2048,7 @@
 		margin-top: 10px
 	}
 	.AlarmConfigGather .el-row:last-child{
-		margin-bottom: 20px
+		margin-bottom: 15px
 	}
 	/* .AlarmConfigGather .el-form-item__error{
     margin-top: -6px;

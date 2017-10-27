@@ -10,9 +10,12 @@
 				<!--操作选择车辆列表显示隐藏-->
 				<div class="operate-module" @click="showCarList"></div>
 				<!--点击选择车辆(接甩挂、冷链、车辆管理)-->
-				<car-tree ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
-						  @node-click="getChoiceCarData" v-if="systemID!=2"></car-tree>
+				<car-tree v-if="systemID!=2" ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
+						  @node-click="getChoiceCarData"></car-tree>
 				<!--电子锁车辆列表-->
+				<car-tree v-if="systemID==2" ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
+						  @node-click="getChoiceCarData"></car-tree>
+<!--
 				<div id="lockList" class="carTeamList" v-if="systemID==2">
 					<el-input
 						class="filterInput"
@@ -22,7 +25,7 @@
 					<el-tree
 						class="filter-tree"
 						:props="defaultProps"
-						:data="data3"
+						:data="lockData"
 						:load="loadTree"
 						:highlight-current="true"
 						default-expand-all
@@ -32,11 +35,13 @@
 						ref="tree2">
 					</el-tree>
 				</div>
+-->
 
 				<ul id="tree-footer" class="list-group">
 					<li class="tree-footer-title">_更多选择_</li>
 					<li class="list-group-item top-border">
-						<label>_所选车辆_：</label>
+						<label v-if="systemID!=2">_所选车辆_：</label>
+						<label v-if="systemID==2">_所选设备_：</label>
 						<span class="text-aqua">{{choiceCarData.name}}</span>
 					</li>
 					<li class="list-group-item no-border">
@@ -651,7 +656,7 @@
 					endTime:null
 				},
 				//电子锁
-				data3: null,
+				lockData: [],
 				filterText: '',
 
 				//折线图参数
@@ -1086,12 +1091,12 @@
 				$("#car-end-time").val(formatDate(0) + " 23:59:59");
 				_this.getCarData()
 			});
-      let oldValue=_this.$store.state.allLocksData;
+      let oldValue=_this.$store.state.mapLocksData;
       setInterval(function () {
-        if(_this.$store.state.allLocksData!=oldValue){
-          console.log(_this.$store.state.allLocksData)
-          _this.data3=_this.$store.state.allLocksData;
-          oldValue=_this.$store.state.allLocksData;
+        if(_this.$store.state.mapLocksData!=oldValue){
+          console.log(_this.$store.state.mapLocksData)
+          _this.lockData=_this.$store.state.mapLocksData;
+          oldValue=_this.$store.state.mapLocksData;
         }
       },1000)
 		},
@@ -1181,15 +1186,17 @@
 					_this.adjustPage()
 				}, 100)
 			},
-
+			//切换显示轨迹点
 			showAllPoints(){
 				this.IsActive.pointType=0;
 				$('#table-inner').css('margin-top',"0px");
 			},
+			//切换显示温度曲线
 			showTemperature(){
 				this.IsActive.pointType=5;
 				this.fullSubMenu();
 			},
+			//切换显示油位曲线
 			showOilLine(){
 				this.IsActive.pointType=6;
 				this.fullSubMenu();
@@ -1201,15 +1208,12 @@
 			**/
 			//调取车辆信息
 			loadTreeData(refresh) {
-				if (this.systemID == 2) {
-					this.data3 = _this.$store.state.allLocksData;
-				} else {
-					if (this.$store.state.allCarsList != null && refresh != true) {
-						setData()
-					} else {
-						_this.$store.commit('getAllCarsData', setData)
 
-					}
+				if (this.$store.state.allCarsList != null && refresh != true) {
+					setData()
+				} else {
+					_this.$store.commit('getAllCarsData', setData)
+
 				}
 				function setData() {
 					if (_this.$store.state.allCarsList.length == 0) {
@@ -1220,26 +1224,6 @@
 
 				}
 
-			},
-		 	filterNode(value, data) {
-        if (!value) return true;
-        if(data.FAssetID){
-          return data.FAssetID.indexOf(value) !== -1;
-        }
-      },
-			renderContent(h, { node, data, store }){
-				return (
-					<span class={{"green":!data.FAlarmOffLine&&data.FAssetID.indexOf("@A")==-1&&data.FAssetID.indexOf("@B")==-1&&data.FAssetID.indexOf("@C")==-1}}>
-						<i class="fa fa-home icon fa-lg" v-show={data.FAssetID.indexOf("@A")!=-1}></i>
-						<i class="fa fa-lock icon" v-show={data.FAssetID.indexOf("@A")==-1&&!data.FLockStatus}></i>
-						<i class="fa fa-unlock icon" v-show={data.FAssetID.indexOf("@A")==-1&&data.FLockStatus}></i>
-						<span v-show={data.FAssetID.indexOf("@A")!=-1}>{data.FVehicleName}</span>
-						<span v-show={data.FAssetID.indexOf("@A")==-1}>{data.FAssetID}</span>
-						<span v-show={data.FAssetID.indexOf("@A")!=-1} style="font-weight:bold">[{data.count}]</span>
-						<span style="margin-left:10px" v-show={data.FAssetID.indexOf("@A")==-1}>({data.FVehicleName})
-						</span>
-					</span>
-				)
 			},
 			//展开车辆选择列表
 			showCarList(){
@@ -2066,15 +2050,14 @@
 							} else {
 								let resRunData = data.reverse(),
 									pointArr = _this.carPointArr,
-									start = _this.carRunArr.startTimeIndex,
-									end = _this.carRunArr.endTimeIndex,
+									//start = _this.carRunArr.startTimeIndex,
+									//end = _this.carRunArr.endTimeIndex,
 									runData = _this.carRunArr.runData,
 									allRunTime = _this.carRunArr.allRunTime,
-									allMileage = _this.carRunArr.allMileage,
-									unlockType = _this.carRunArr.FOpenType;
+									allMileage = _this.carRunArr.allMileage;
 
 								//_this.parseRoute(resRunData, pointArr, start, end, runData, allRunTime, allMileage, unlockType);
-								_this.parseRoute(resRunData, pointArr, runData, allRunTime, allMileage, unlockType);
+								_this.parseRoute(resRunData, pointArr, runData, allRunTime, allMileage);
 
  							}
 						}
@@ -2084,7 +2067,7 @@
 
 			},
 			//分析运行段数据 (新 在轨迹上显示起始点)
-			parseRoute(resRunData, pointArr, runData, allRunTime, allMileage, unlockType){
+			parseRoute(resRunData, pointArr, runData, allRunTime, allMileage,){
 				let allT = null,
 					allM = null;
 
@@ -2094,32 +2077,59 @@
 					//生成运行端数据
 					for (let i = 0; i < resRunData.length; i++) {
 						let resRunItem = resRunData[i],
-							startT= _this.parseGMT(resRunItem.FStartDateTime),
-							endT= _this.parseGMT(resRunItem.FEndDateTime),
+							startT,
+							endT,
 							aRunData;
+
+						if(this.systemID==2){
+							startT= _this.parseGMT(resRunItem.FStartTime);
+							endT= _this.parseGMT(resRunItem.FEndTime);
+						}else{
+							startT= _this.parseGMT(resRunItem.FStartDateTime);
+							endT= _this.parseGMT(resRunItem.FEndDateTime);
+						}
+
+						//console.log(resRunItem.FStartTime);
+						//console.log(resRunItem.FEndTime);
+
+						let unlockType=null;
+						switch(resRunItem.FOpenType){
+						    case 1:
+								unlockType="_刷卡开锁_";
+						        break;
+							case 2:
+								unlockType="_远程开锁_";
+								break;
+							case 3:
+								unlockType="_蓝牙开锁_";
+								break;
+						}
+
+
 
 						//判断运行段开始点是否在轨迹点内
 						if(i==0 && this.GetDateSeconds(pointArr[0].time)>this.GetDateSeconds(startT)){
 
-								aRunData = {
-									startTime:pointArr[0].time,
-									endTime: endT,
-									startPoint:pointArr[0].point,
-									endPoint:_this.parsePoint({
-										lng: parseFloat(resRunItem.FEndLongitude),
-										lat: parseFloat(resRunItem.FEndLatitude)
-									}),
-									startAddress: "",
-									endAddress: "",
-									unlockType: unlockType,
-									timeValue: this.formatSeconds(this.getSecondValue(startT,endT)),
-									mileage: resRunItem.FEndMileage -pointArr[0].mileage,
-									active: false,
-									//轮胎数据
-									tyre: []
-								}
+							if(this.systemID==2) continue; //电子锁系统如果开始时间不在范围内  则剔除
 
-
+							//非电子锁系统 为运行段 不在轨迹点范围内的将 轨迹点的起始点定未开始点
+							aRunData = {
+								startTime:pointArr[0].time,
+								endTime: endT,
+								startPoint:pointArr[0].point,
+								endPoint:_this.parsePoint({
+									lng: parseFloat(resRunItem.FEndLongitude),
+									lat: parseFloat(resRunItem.FEndLatitude)
+								}),
+								startAddress: "",
+								endAddress: "",
+								unlockType: unlockType,
+								timeValue: this.formatSeconds(this.getSecondValue(startT,endT)),
+								mileage: resRunItem.FEndMileage -pointArr[0].mileage,
+								active: false,
+								//轮胎数据
+								tyre: []
+							}
 
 						}else if(i == resRunData.length-1 && this.GetDateSeconds(pointArr[pointArr.length-1].time)<this.GetDateSeconds(endT)){
 							aRunData = {
@@ -2183,6 +2193,7 @@
 
 						}
 						runData.push(aRunData);
+						console.log(runData)
 						if (allRunTime != null && allMileage != null) {
 							allT += this.getSecondValue(startT,endT);
 							allM += aRunData.mileage;
@@ -2316,7 +2327,9 @@
 				this.$refs.map.mapShowRunPath(this.carRunArr.runData[index]);
 			},
 
-			//*******************************停车点***************************************
+			/********       停车点       *******/
+
+
 			//请求停车点信息
 			getStopData(){
 
@@ -2550,12 +2563,6 @@
 		watch: {
 			screenHeight () {
 				this.adjustPage()
-			},
-			filterText(val) {
-				this.$refs.tree2.filter(val);
-			},
-			showNum(){
-				this.endIndex=this.startIndex+this.showNum;
 			}
 		},
 		computed: {

@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<!--选择车辆弹窗-->
-		<vehical-select-dialog v-on:child.sync="get"></vehical-select-dialog>
+		<vehical-select-dialog v-on:child.sync="get" ref="vehicle"></vehical-select-dialog>
 		<div id="operate_wrapper"><!--part1 header start-->
 			<div class='box-header'>
 				<div class="block">
@@ -880,6 +880,7 @@
 				this.show_FuelImproper= false;
 				this.showChartCollect=false;
 				this.show_pagination=true;
+				this.$refs.vehicle.$children[1].setCheckedKeys([]);
 			},
 			//获取车辆信息
 			get(data){

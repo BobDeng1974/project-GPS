@@ -10,12 +10,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_普通公路超速_(km/h)" prop="FOverSpeedOrdinaryRoad">
-							<el-input v-model.number="objDetail.FOverSpeedOrdinaryRoad"></el-input>
+							<el-input v-model="objDetail.FOverSpeedOrdinaryRoad"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_高速公路超速_(km/h)" prop="FOverSpeedHighRoad">
-							<el-input v-model.number="objDetail.FOverSpeedHighRoad"></el-input>
+							<el-input v-model="objDetail.FOverSpeedHighRoad"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -23,12 +23,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_超速时长_(min)" prop="FOverSpeedTimeLength">
-							<el-input v-model.number="objDetail.FOverSpeedTimeLength"></el-input>
+							<el-input v-model="objDetail.FOverSpeedTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_疲劳驾驶超时_(min)" prop="FFatigueRunningTimeLength">
-							<el-input v-model.number="objDetail.FFatigueRunningTimeLength"></el-input>
+							<el-input v-model="objDetail.FFatigueRunningTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -36,12 +36,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-							<el-input v-model.number="objDetail.FFatigueRestTimeLength"></el-input>
+							<el-input v-model="objDetail.FFatigueRestTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_熄火停车时长_(min)" prop="FStopCloseACCTimeLength">
-							<el-input v-model.number="objDetail.FStopCloseACCTimeLength"></el-input>
+							<el-input v-model="objDetail.FStopCloseACCTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -49,12 +49,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_未熄火停车时长_(min)" prop="FStopOpenACCTimeLength">
-							<el-input v-model.number="objDetail.FStopOpenACCTimeLength"></el-input>
+							<el-input v-model="objDetail.FStopOpenACCTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_高胎压_(bar)" prop="FTPMSMaxTyre">
-							<el-input v-model.number="objDetail.FTPMSMaxTyre"></el-input>
+							<el-input v-model="objDetail.FTPMSMaxTyre"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -62,12 +62,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_低胎压_(bar)" prop="FTPMSMinTyre">
-							<el-input v-model.number="objDetail.FTPMSMinTyre"></el-input>
+							<el-input v-model="objDetail.FTPMSMinTyre"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_高胎温_(℃)" prop="FTPMSMaxTem">
-							<el-input v-model.number="objDetail.FTPMSMaxTem"></el-input>
+							<el-input v-model="objDetail.FTPMSMaxTem"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -75,12 +75,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_低胎温_(℃)" prop="FTPMSMinTem">
-							<el-input v-model.number="objDetail.FTPMSMinTem"></el-input>
+							<el-input v-model="objDetail.FTPMSMinTem"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_胎温胎压持续时长_(min)" prop="FTPMSTimeLength">
-							<el-input v-model.number="objDetail.FTPMSTimeLength"></el-input>
+							<el-input v-model="objDetail.FTPMSTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -92,12 +92,12 @@
          <el-row>
            <el-col :span="11">
              <el-form-item label="_普通公路超速_(km/h)" prop="FOverSpeedOrdinaryRoad">
-               <el-input v-model.number="objDetai2.FOverSpeedOrdinaryRoad"></el-input>
+               <el-input v-model="objDetai2.FOverSpeedOrdinaryRoad"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="12">
              <el-form-item label="_高速公路超速_(km/h)" prop="FOverSpeedHighRoad">
-               <el-input v-model.number="objDetai2.FOverSpeedHighRoad"></el-input>
+               <el-input v-model="objDetai2.FOverSpeedHighRoad"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="1"></el-col>
@@ -105,12 +105,12 @@
          <el-row>
             <el-col :span="11">
               <el-form-item label="_超速时长_(min)" prop="FOverSpeedTimeLength">
-                <el-input v-model.number="objDetai2.FOverSpeedTimeLength"></el-input>
+                <el-input v-model="objDetai2.FOverSpeedTimeLength"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="_疲劳驾驶超时_(min)" prop="FFatigueRunningTimeLength">
-                <el-input v-model.number="objDetai2.FFatigueRunningTimeLength"></el-input>
+                <el-input v-model="objDetai2.FFatigueRunningTimeLength"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="1"></el-col>
@@ -118,12 +118,12 @@
          <el-row>
             <el-col :span="11">
                <el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-                  <el-input v-model.number="objDetai2.FFatigueRestTimeLength"></el-input>
+                  <el-input v-model="objDetai2.FFatigueRestTimeLength"></el-input>
                </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="_熄火停车时长_(min)" prop="FStopCloseACCTimeLength">
-               <el-input v-model.number="objDetai2.FStopCloseACCTimeLength"></el-input>
+               <el-input v-model="objDetai2.FStopCloseACCTimeLength"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="1"></el-col>
@@ -131,7 +131,7 @@
          <el-row>
            <el-col :span="11">
              <el-form-item label="_未熄火停车时长_(min)" prop="FStopOpenACCTimeLength">
-               <el-input v-model.number="objDetai2.FStopOpenACCTimeLength"></el-input>
+               <el-input v-model="objDetai2.FStopOpenACCTimeLength"></el-input>
              </el-form-item>
            </el-col>
          </el-row>
@@ -141,12 +141,12 @@
          <el-row>
            <el-col :span="11">
              <el-form-item label="_普通公路超速_(km/h)" prop="FOverSpeedOrdinaryRoad">
-               <el-input v-model.number="objDetai4.FOverSpeedOrdinaryRoad"></el-input>
+               <el-input v-model="objDetai4.FOverSpeedOrdinaryRoad"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="12">
              <el-form-item label="_高速公路超速_(km/h)" prop="FOverSpeedHighRoad">
-               <el-input v-model.number="objDetai4.FOverSpeedHighRoad"></el-input>
+               <el-input v-model="objDetai4.FOverSpeedHighRoad"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="1"></el-col>
@@ -154,12 +154,12 @@
          <el-row>
             <el-col :span="11">
               <el-form-item label="_超速时长_(min)" prop="FOverSpeedTimeLength">
-                <el-input v-model.number="objDetai4.FOverSpeedTimeLength"></el-input>
+                <el-input v-model="objDetai4.FOverSpeedTimeLength"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="_疲劳驾驶超时_(min)" prop="FFatigueRunningTimeLength">
-                <el-input v-model.number="objDetai4.FFatigueRunningTimeLength"></el-input>
+                <el-input v-model="objDetai4.FFatigueRunningTimeLength"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="1"></el-col>
@@ -167,12 +167,12 @@
          <el-row>
             <el-col :span="11">
                <el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-                  <el-input v-model.number="objDetai4.FFatigueRestTimeLength"></el-input>
+                  <el-input v-model="objDetai4.FFatigueRestTimeLength"></el-input>
                </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="_熄火停车时长_(min)" prop="FStopCloseACCTimeLength">
-               <el-input v-model.number="objDetai4.FStopCloseACCTimeLength"></el-input>
+               <el-input v-model="objDetai4.FStopCloseACCTimeLength"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="1"></el-col>
@@ -180,12 +180,12 @@
          <el-row>
            <el-col :span="11">
              <el-form-item label="_未熄火停车时长_(min)" prop="FStopOpenACCTimeLength">
-               <el-input v-model.number="objDetai4.FStopOpenACCTimeLength"></el-input>
+               <el-input v-model="objDetai4.FStopOpenACCTimeLength"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="12">
              <el-form-item label="_最低温_(℃)" prop="FCoolerLowTemperature">
-               <el-input v-model.number="objDetai4.FCoolerLowTemperature"></el-input>
+               <el-input v-model="objDetai4.FCoolerLowTemperature"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="1"></el-col> 
@@ -193,12 +193,12 @@
          <el-row>
            <el-col :span="11">
               <el-form-item label="_最高温_(℃)" prop="FCoolerHightTemperature">
-                 <el-input v-model.number="objDetai4.FCoolerHightTemperature"></el-input>
+                 <el-input v-model="objDetai4.FCoolerHightTemperature"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="_冷机超温报警时长_(min)" prop="FCoolerTimeLength">
-                <el-input v-model.number="objDetai4.FCoolerTimeLength"></el-input>
+                <el-input v-model="objDetai4.FCoolerTimeLength"></el-input>
               </el-form-item>
             </el-col>
            <el-col :span="1"></el-col> 
@@ -209,12 +209,12 @@
          <el-row>
            <el-col :span="11">
              <el-form-item label="_普通公路超速_(km/h)" prop="FOverSpeedOrdinaryRoad">
-               <el-input v-model.number="objDetai3.FOverSpeedOrdinaryRoad"></el-input>
+               <el-input v-model="objDetai3.FOverSpeedOrdinaryRoad"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="12">
              <el-form-item label="_高速公路超速_(km/h)" prop="FOverSpeedHighRoad">
-               <el-input v-model.number="objDetai3.FOverSpeedHighRoad"></el-input>
+               <el-input v-model="objDetai3.FOverSpeedHighRoad"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="1"></el-col>
@@ -222,30 +222,30 @@
          <el-row>
             <el-col :span="11">
               <el-form-item label="_超速时长_(min)" prop="FOverSpeedTimeLength">
-                <el-input v-model.number="objDetai3.FOverSpeedTimeLength"></el-input>
+                <el-input v-model="objDetai3.FOverSpeedTimeLength"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
              <el-form-item label="_疲劳驾驶超时_(min)" prop="FFatigueRunningTimeLength">
-               <el-input v-model.number="objDetai3.FFatigueRunningTimeLength"></el-input>
+               <el-input v-model="objDetai3.FFatigueRunningTimeLength"></el-input>
              </el-form-item>
             </el-col>
             <el-col :span="1"></el-col>
            <!-- <el-col :span="12">
              <el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-               <el-input v-model.number="objDetai3.FFatigueRestTimeLength"></el-input>
+               <el-input v-model="objDetai3.FFatigueRestTimeLength"></el-input>
              </el-form-item>
            </el-col> -->
          </el-row>
          <el-row>
             <el-col :span="11">
               <el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-                <el-input v-model.number="objDetai3.FFatigueRestTimeLength"></el-input>
+                <el-input v-model="objDetai3.FFatigueRestTimeLength"></el-input>
               </el-form-item>
             </el-col> 
            <el-col :span="12">
              <el-form-item label="_熄火停车时长_(min)" prop="FStopCloseACCTimeLength">
-               <el-input v-model.number="objDetai3.FStopCloseACCTimeLength"></el-input>
+               <el-input v-model="objDetai3.FStopCloseACCTimeLength"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="1"></el-col>
@@ -258,7 +258,7 @@
            </el-col>
            <el-col :span="12">
              <el-form-item label="_最低温_(℃)" prop="FCoolerLowTemperature">
-               <el-input v-model.number="objDetai3.FCoolerLowTemperature"></el-input>
+               <el-input v-model="objDetai3.FCoolerLowTemperature"></el-input>
              </el-form-item>
            </el-col>
            <el-col :span="1"></el-col>
@@ -266,7 +266,7 @@
           <el-row>
            <el-col :span="11">
               <el-form-item label="_最高温_(℃)" prop="FCoolerHightTemperature">
-                 <el-input v-model.number="objDetai3.FCoolerHightTemperature"></el-input>
+                 <el-input v-model="objDetai3.FCoolerHightTemperature"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -300,12 +300,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_普通公路超速_(km/h)" prop="FOverSpeedOrdinaryRoad">
-							<el-input v-model.number="ruleForm11.FOverSpeedOrdinaryRoad"></el-input>
+							<el-input v-model="ruleForm11.FOverSpeedOrdinaryRoad"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_高速公路超速_(km/h)" prop="FOverSpeedHighRoad">
-							<el-input v-model.number="ruleForm11.FOverSpeedHighRoad"></el-input>
+							<el-input v-model="ruleForm11.FOverSpeedHighRoad"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -313,7 +313,7 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_超速时长_(min)" prop="FOverSpeedTimeLength">
-							<el-input v-model.number="ruleForm11.FOverSpeedTimeLength"></el-input>
+							<el-input v-model="ruleForm11.FOverSpeedTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
@@ -326,12 +326,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-							<el-input v-model.number="ruleForm11.FFatigueRestTimeLength"></el-input>
+							<el-input v-model="ruleForm11.FFatigueRestTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_熄火停车时长_(min)" prop="FStopCloseACCTimeLength">
-							<el-input v-model.number="ruleForm11.FStopCloseACCTimeLength"></el-input>
+							<el-input v-model="ruleForm11.FStopCloseACCTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -339,12 +339,12 @@
 				<el-row>
 					<el-col :span="11">
 						<el-form-item label="_未熄火停车时长_(min)" prop="FStopOpenACCTimeLength">
-							<el-input v-model.number="ruleForm11.FStopOpenACCTimeLength"></el-input>
+							<el-input v-model="ruleForm11.FStopOpenACCTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_高胎压_(bar)" prop="FTPMSMaxTyre">
-							<el-input v-model.number="ruleForm11.FTPMSMaxTyre"></el-input>
+							<el-input v-model="ruleForm11.FTPMSMaxTyre"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -352,12 +352,12 @@
 				<el-row >
 					<el-col :span="11">
 						<el-form-item label="_低胎压_(bar)" prop="FTPMSMinTyre">
-							<el-input v-model.number="ruleForm11.FTPMSMinTyre"></el-input>
+							<el-input v-model="ruleForm11.FTPMSMinTyre"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_高胎温_(℃)" prop="FTPMSMaxTem">
-							<el-input v-model.number="ruleForm11.FTPMSMaxTem"></el-input>
+							<el-input v-model="ruleForm11.FTPMSMaxTem"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -365,12 +365,12 @@
 				<el-row >
 					<el-col :span="11">
 						<el-form-item label="_低胎温_(℃)" prop="FTPMSMinTem">
-							<el-input v-model.number="ruleForm11.FTPMSMinTem"></el-input>
+							<el-input v-model="ruleForm11.FTPMSMinTem"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_胎温胎压持续时长_(min)" prop="FTPMSTimeLength">
-							<el-input v-model.number="ruleForm11.FTPMSTimeLength"></el-input>
+							<el-input v-model="ruleForm11.FTPMSTimeLength"></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="1"></el-col>
@@ -401,12 +401,12 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="_普通公路超速_(km/h)" prop="FOverSpeedOrdinaryRoad">
-              <el-input v-model.number="ruleForm22.FOverSpeedOrdinaryRoad"></el-input>
+              <el-input v-model="ruleForm22.FOverSpeedOrdinaryRoad"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_高速公路超速_(km/h)" prop="FOverSpeedHighRoad">
-              <el-input v-model.number="ruleForm22.FOverSpeedHighRoad"></el-input>
+              <el-input v-model="ruleForm22.FOverSpeedHighRoad"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1"></el-col>
@@ -414,12 +414,12 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="_超速时长_(min)" prop="FOverSpeedTimeLength">
-              <el-input v-model.number="ruleForm22.FOverSpeedTimeLength"></el-input>
+              <el-input v-model="ruleForm22.FOverSpeedTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_疲劳驾驶超时_(min)" prop="FFatigueRunningTimeLength">
-              <el-input v-model.number="ruleForm22.FFatigueRunningTimeLength"></el-input>
+              <el-input v-model="ruleForm22.FFatigueRunningTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1"></el-col>
@@ -427,12 +427,12 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-              <el-input v-model.number="ruleForm22.FFatigueRestTimeLength"></el-input>
+              <el-input v-model="ruleForm22.FFatigueRestTimeLength"></el-input>
             </el-form-item>
           </el-col>
            <el-col :span="12">
             <el-form-item label="_熄火停车时长_(min)" prop="FStopCloseACCTimeLength">
-              <el-input v-model.number="ruleForm22.FStopCloseACCTimeLength"></el-input>
+              <el-input v-model="ruleForm22.FStopCloseACCTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1"></el-col>
@@ -440,7 +440,7 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="_未熄火停车时长_(min)" prop="FStopOpenACCTimeLength">
-              <el-input v-model.number="ruleForm22.FStopOpenACCTimeLength"></el-input>
+              <el-input v-model="ruleForm22.FStopOpenACCTimeLength"></el-input>
             </el-form-item>
           </el-col> 
         </el-row>
@@ -470,12 +470,12 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="_普通公路超速_(km/h)" prop="FOverSpeedOrdinaryRoad">
-              <el-input v-model.number="ruleForm44.FOverSpeedOrdinaryRoad"></el-input>
+              <el-input v-model="ruleForm44.FOverSpeedOrdinaryRoad"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_高速公路超速_(km/h)" prop="FOverSpeedHighRoad">
-              <el-input v-model.number="ruleForm44.FOverSpeedHighRoad"></el-input>
+              <el-input v-model="ruleForm44.FOverSpeedHighRoad"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1"></el-col>
@@ -483,12 +483,12 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="_超速时长_(min)" prop="FOverSpeedTimeLength">
-              <el-input v-model.number="ruleForm44.FOverSpeedTimeLength"></el-input>
+              <el-input v-model="ruleForm44.FOverSpeedTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_疲劳驾驶超时_(min)" prop="FFatigueRunningTimeLength">
-              <el-input v-model.number="ruleForm44.FFatigueRunningTimeLength"></el-input>
+              <el-input v-model="ruleForm44.FFatigueRunningTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1"></el-col>
@@ -496,12 +496,12 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-              <el-input v-model.number="ruleForm44.FFatigueRestTimeLength"></el-input>
+              <el-input v-model="ruleForm44.FFatigueRestTimeLength"></el-input>
             </el-form-item>
           </el-col>
            <el-col :span="12">
             <el-form-item label="_熄火停车时长_(min)" prop="FStopCloseACCTimeLength">
-              <el-input v-model.number="ruleForm44.FStopCloseACCTimeLength"></el-input>
+              <el-input v-model="ruleForm44.FStopCloseACCTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1"></el-col>
@@ -509,12 +509,12 @@
         <el-row>
           <el-col :span="11">
             <el-form-item label="_未熄火停车时长_(min)" prop="FStopOpenACCTimeLength">
-              <el-input v-model.number="ruleForm44.FStopOpenACCTimeLength"></el-input>
+              <el-input v-model="ruleForm44.FStopOpenACCTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_最低温_(℃)" prop="FCoolerLowTemperature">
-               <el-input v-model.number="ruleForm44.FCoolerLowTemperature"></el-input>
+               <el-input v-model="ruleForm44.FCoolerLowTemperature"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1"></el-col>
@@ -522,12 +522,12 @@
         <el-row>
            <el-col :span="11">
               <el-form-item label="_最高温_(℃)" prop="FCoolerHightTemperature">
-                 <el-input v-model.number="ruleForm44.FCoolerHightTemperature"></el-input>
+                 <el-input v-model="ruleForm44.FCoolerHightTemperature"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="_冷机超温报警时长_(min)" prop="FCoolerTimeLength">
-                <el-input v-model.number="ruleForm44.FCoolerTimeLength"></el-input>
+                <el-input v-model="ruleForm44.FCoolerTimeLength"></el-input>
               </el-form-item>
             </el-col>
            <el-col :span="1"></el-col> 
@@ -558,60 +558,60 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="_普通公路超速_(km/h)" prop="FOverSpeedOrdinaryRoad">
-              <el-input v-model.number="ruleForm33.FOverSpeedOrdinaryRoad"></el-input>
+              <el-input v-model="ruleForm33.FOverSpeedOrdinaryRoad"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_高速公路超速_(km/h)" prop="FOverSpeedHighRoad">
-              <el-input v-model.number="ruleForm33.FOverSpeedHighRoad"></el-input>
+              <el-input v-model="ruleForm33.FOverSpeedHighRoad"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="_超速时长_(min)" prop="FOverSpeedTimeLength">
-              <el-input v-model.number="ruleForm33.FOverSpeedTimeLength"></el-input>
+              <el-input v-model="ruleForm33.FOverSpeedTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_疲劳驾驶超时_(min)" prop="FFatigueRunningTimeLength">
-              <el-input v-model.number="ruleForm33.FFatigueRunningTimeLength"></el-input>
+              <el-input v-model="ruleForm33.FFatigueRunningTimeLength"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="_疲劳驾驶休息时长_(min)" prop="FFatigueRestTimeLength">
-              <el-input v-model.number="ruleForm33.FFatigueRestTimeLength"></el-input>
+              <el-input v-model="ruleForm33.FFatigueRestTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_熄火停车时长_(min)" prop="FStopCloseACCTimeLength">
-              <el-input v-model.number="ruleForm33.FStopCloseACCTimeLength"></el-input>
+              <el-input v-model="ruleForm33.FStopCloseACCTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <!-- <el-col :span="12">
             <el-form-item label="_未熄火停车时长_(min)" prop="FStopOpenACCTimeLength">
-              <el-input v-model.number="ruleForm33.FStopOpenACCTimeLength"></el-input>
+              <el-input v-model="ruleForm33.FStopOpenACCTimeLength"></el-input>
             </el-form-item>
           </el-col> -->
         </el-row>
         <el-row >
           <el-col :span="12">
             <el-form-item label="_未熄火停车时长_(min)" prop="FStopOpenACCTimeLength">
-              <el-input v-model.number="ruleForm33.FStopOpenACCTimeLength"></el-input>
+              <el-input v-model="ruleForm33.FStopOpenACCTimeLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="_最高温_(℃)" prop="FCoolerHightTemperature">
-              <el-input v-model.number="ruleForm33.FCoolerHightTemperature"></el-input>
+              <el-input v-model="ruleForm33.FCoolerHightTemperature"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row >
           <el-col :span="12">
             <el-form-item label="_最低温_(℃)" prop="FCoolerLowTemperature">
-              <el-input v-model.number="ruleForm33.FCoolerLowTemperature"></el-input>
+              <el-input v-model="ruleForm33.FCoolerLowTemperature"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -637,17 +637,17 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="_普通公路_(km/h)" label-width="200px" label-position="left" prop='FOverSpeedOrdinaryRoad'>
-													<el-input size="small" v-model.number="ruleForm1.FOverSpeedOrdinaryRoad"></el-input>
+													<el-input size="small" v-model="ruleForm1.FOverSpeedOrdinaryRoad"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="_高速公路_(km/h)" label-width="200px" label-position="left" prop='FOverSpeedHighRoad'>
-													<el-input size="small" v-model.number="ruleForm1.FOverSpeedHighRoad"></el-input>
+													<el-input size="small" v-model="ruleForm1.FOverSpeedHighRoad"></el-input>
 												</el-form-item>
 											</el-col>
                       <el-col :span="8">
                         <el-form-item label="_持续时长_(min)" label-width="200px" label-position="left" prop='FOverSpeedTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm1.FOverSpeedTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm1.FOverSpeedTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
 										</el-row>
@@ -659,12 +659,12 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="_连续驾驶时长_(min)" label-width="200px" label-position="left" prop='FFatigueRunningTimeLength'>
-													<el-input size="small" v-model.number="ruleForm1.FFatigueRunningTimeLength"></el-input>
+													<el-input size="small" v-model="ruleForm1.FFatigueRunningTimeLength"></el-input>
 												</el-form-item>
 											</el-col>
 										    <el-col :span="8">
 												<el-form-item label="_休息时长_(min)" label-width="200px" label-position="left" prop='FFatigueRestTimeLength'>
-													<el-input size="small" v-model.number="ruleForm1.FFatigueRestTimeLength"></el-input>
+													<el-input size="small" v-model="ruleForm1.FFatigueRestTimeLength"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -676,12 +676,12 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="_熄火停车_(min)" label-width="200px" label-position="left" prop='FStopCloseACCTimeLength'>
-													<el-input size="small" v-model.number="ruleForm1.FStopCloseACCTimeLength"></el-input>
+													<el-input size="small" v-model="ruleForm1.FStopCloseACCTimeLength"></el-input>
 												</el-form-item>
 											</el-col>
 										    <el-col :span="8">
 												<el-form-item label="_未熄火停车_(min)" label-width="200px" label-position="left" prop='FStopOpenACCTimeLength'>
-													<el-input size="small" v-model.number="ruleForm1.FStopOpenACCTimeLength"></el-input>
+													<el-input size="small" v-model="ruleForm1.FStopOpenACCTimeLength"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -693,29 +693,29 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="_高胎压_(bar)" label-width="200px" label-position="left" prop='FTPMSMaxTyre'>
-													<el-input size="small" v-model.number="ruleForm1.FTPMSMaxTyre"></el-input>
+													<el-input size="small" v-model="ruleForm1.FTPMSMaxTyre"></el-input>
 												</el-form-item>
 											</el-col>
 										    <el-col :span="8">
 												<el-form-item label="_低胎压_(bar)" label-width="200px" label-position="left" prop='FTPMSMinTyre'>
-													<el-input size="small" v-model.number="ruleForm1.FTPMSMinTyre"></el-input>
+													<el-input size="small" v-model="ruleForm1.FTPMSMinTyre"></el-input>
 												</el-form-item>
 											</el-col>
                       <el-col :span="8">
                         <el-form-item label="_胎温胎压持续时长_(min)" label-width="200px" label-position="left" prop='FTPMSTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm1.FTPMSTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm1.FTPMSTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
 										</el-row>
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="_高胎温_(℃)" label-width="200px" label-position="left" prop='FTPMSMaxTem'>
-													<el-input size="small" v-model.number="ruleForm1.FTPMSMaxTem"></el-input>
+													<el-input size="small" v-model="ruleForm1.FTPMSMaxTem"></el-input>
 												</el-form-item>
 											</el-col>
 										     <el-col :span="8">
 												<el-form-item label="_低胎温_(℃)" label-width="200px" label-position="left" prop='FTPMSMinTem'>
-													<el-input size="small" v-model.number="ruleForm1.FTPMSMinTem"></el-input>
+													<el-input size="small" v-model="ruleForm1.FTPMSMinTem"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -730,24 +730,24 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="_普通公路_(km/h)" label-width="200px" label-position="left" prop='FOverSpeedOrdinaryRoad'>
-                          <el-input size="small" v-model.number="ruleForm2.FOverSpeedOrdinaryRoad"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FOverSpeedOrdinaryRoad"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_高速公路_(km/h)" label-width="200px" label-position="left" prop='FOverSpeedHighRoad'>
-                          <el-input size="small" v-model.number="ruleForm2.FOverSpeedHighRoad"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FOverSpeedHighRoad"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_持续时长_(min)" label-width="200px" label-position="left" prop='FOverSpeedTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm2.FOverSpeedTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FOverSpeedTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
                     <!-- <el-row>
                       <el-col :span="6">
                         <el-form-item label="_持续时长_(_分钟_)" label-width="200px" label-position="left" prop='FOverSpeedTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm2.FOverSpeedTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FOverSpeedTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row> -->
@@ -759,12 +759,12 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="_超时_(min)" label-width="200px" label-position="left" prop='FFatigueRunningTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm2.FFatigueRunningTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FFatigueRunningTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_休息时长_(min)" label-width="200px" label-position="left" prop='FFatigueRestTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm2.FFatigueRestTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FFatigueRestTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -776,12 +776,12 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="_熄火停车_(min)" label-width="200px" label-position="left" prop='FStopCloseACCTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm2.FStopCloseACCTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FStopCloseACCTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_未熄火停车_(min)" label-width="200px" label-position="left" prop='FStopOpenACCTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm2.FStopOpenACCTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FStopOpenACCTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -796,24 +796,24 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="_普通公路_(km/h)" label-width="200px" label-position="left" prop='FOverSpeedOrdinaryRoad'>
-                          <el-input size="small" v-model.number="ruleForm4.FOverSpeedOrdinaryRoad"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FOverSpeedOrdinaryRoad"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_高速公路_(km/h)" label-width="200px" label-position="left" prop='FOverSpeedHighRoad'>
-                          <el-input size="small" v-model.number="ruleForm4.FOverSpeedHighRoad"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FOverSpeedHighRoad"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_持续时长_(min)" label-width="200px" label-position="left" prop='FOverSpeedTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm4.FOverSpeedTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FOverSpeedTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
                     <!-- <el-row>
                       <el-col :span="6">
                         <el-form-item label="_持续时长_(_分钟_)" label-width="200px" label-position="left" prop='FOverSpeedTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm2.FOverSpeedTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm2.FOverSpeedTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row> -->
@@ -825,12 +825,12 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="_超时_(min)" label-width="200px" label-position="left" prop='FFatigueRunningTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm4.FFatigueRunningTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FFatigueRunningTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_休息时长_(min)" label-width="200px" label-position="left" prop='FFatigueRestTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm4.FFatigueRestTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FFatigueRestTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -842,12 +842,12 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="_熄火停车_(min)" label-width="200px" label-position="left" prop='FStopCloseACCTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm4.FStopCloseACCTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FStopCloseACCTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_未熄火停车_(min)" label-width="200px" label-position="left" prop='FStopOpenACCTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm4.FStopOpenACCTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FStopOpenACCTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -859,17 +859,17 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="_最高温_(°C)" label-width="200px" label-position="left" prop='FCoolerHightTemperature'>
-                          <el-input size="small" v-model.number="ruleForm4.FCoolerHightTemperature"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FCoolerHightTemperature"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_最低温_(°C)" label-width="200px" label-position="left" prop='FCoolerLowTemperature'>
-                          <el-input size="small" v-model.number="ruleForm4.FCoolerLowTemperature"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FCoolerLowTemperature"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="_冷机超温报警时长_(min)" label-width="200px" label-position="left" prop='FCoolerTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm4.FCoolerTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm4.FCoolerTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -884,24 +884,24 @@
                     <el-row>
                       <el-col :span="6">
                         <el-form-item label="_普通公路_(km/h)" label-width="200px" label-position="left" prop='FOverSpeedOrdinaryRoad'>
-                          <el-input size="small" v-model.number="ruleForm3.FOverSpeedOrdinaryRoad"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FOverSpeedOrdinaryRoad"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="6">
                         <el-form-item label="_高速公路_(km/h)" label-width="200px" label-position="left" prop='FOverSpeedHighRoad'>
-                          <el-input size="small" v-model.number="ruleForm3.FOverSpeedHighRoad"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FOverSpeedHighRoad"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="6">
                         <el-form-item label="_持续时长_(min)" label-width="200px" label-position="left" prop='FOverSpeedTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm3.FOverSpeedTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FOverSpeedTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
                     <!-- <el-row>
                       <el-col :span="6">
                         <el-form-item label="_持续时长_(_分钟_)" label-width="200px" label-position="left" prop='FOverSpeedTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm3.FOverSpeedTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FOverSpeedTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row> -->
@@ -913,12 +913,12 @@
                     <el-row>
                       <el-col :span="6">
                         <el-form-item label="_超时_(min)" label-width="200px" label-position="left" prop='FFatigueRunningTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm3.FFatigueRunningTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FFatigueRunningTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="6">
                         <el-form-item label="_休息时长_(min)" label-width="200px" label-position="left" prop='FFatigueRestTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm3.FFatigueRestTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FFatigueRestTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -930,12 +930,12 @@
                     <el-row>
                       <el-col :span="6">
                         <el-form-item label="_熄火停车_(min)" label-width="200px" label-position="left" prop='FStopCloseACCTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm3.FStopCloseACCTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FStopCloseACCTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="6">
                         <el-form-item label="_未熄火停车_(min)" label-width="200px" label-position="left" prop='FStopOpenACCTimeLength'>
-                          <el-input size="small" v-model.number="ruleForm3.FStopOpenACCTimeLength"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FStopOpenACCTimeLength"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -947,12 +947,12 @@
                     <el-row>
                       <el-col :span="6">
                         <el-form-item label="_最高温_(°C)" label-width="200px" label-position="left" prop='FCoolerHightTemperature'>
-                          <el-input size="small" v-model.number="ruleForm3.FCoolerHightTemperature"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FCoolerHightTemperature"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="6">
                         <el-form-item label="_最低温_(°C)" label-width="200px" label-position="left" prop='FCoolerLowTemperature'>
-                          <el-input size="small" v-model.number="ruleForm3.FCoolerLowTemperature"></el-input>
+                          <el-input size="small" v-model="ruleForm3.FCoolerLowTemperature"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -1051,53 +1051,32 @@
 	import vehicalList from 'components/Common/vehicalList.vue'
 	export default {
 		data() {
-			/*var checkdata = (rule,value,callback) => {
-		        if (isNaN(value)) {
-		           callback(new Error('_请输入数字_'));
-		        } else if(!value){
-              callback(new Error('_不能为空_'));
-            }else {
-		           callback();
-		        }
-		    };*/
       const checkRoad = (rule,value,callback) => {  //普路
-            if(!value) {
-                return callback(new Error('_请输入_20~150_之间的整数_'));
-              }
-            else if (value && !Number.isInteger(value)) {
-               callback(new Error('_请输入_20~150_之间的整数_'));
-            } else if(value>150||value<20){
-              callback(new Error('_请输入_20~150_之间的整数_'));
-            }else {
-               callback();
-            }
+          var par1=/^[1-9]\d*$/ ;   //非零的正整数：
+          if(!par1.test(value)||(value>150)||(value<20)){
+            callback(new Error('_请输入_20~150_之间的整数_'));
+          }else{
+            callback();
+          } 
         };
       const checkHigh = (rule,value,callback) => {  //高速
-            if(!value) {
-                return callback(new Error('_请输入_50~150_之间的整数_'));
-              }
-            else if (value && !Number.isInteger(value)) {
-               callback(new Error('_请输入_50~150_之间的整数_'));
-            } else if(value>150||value<50){
-              callback(new Error('_请输入_50~150_的整数_'));
-            }else {
-               callback();
-            }
+          var par2=/^[1-9]\d*$/ ;   //非零的正整数：
+          if(!par2.test(value)||(value>150)||(value<50)){
+            callback(new Error('_请输入_50~150_之间的整数_'));
+          }else{
+            callback();
+          } 
         };
         const checkTime = (rule,value,callback) => {   //超时时长
-            if(!value) {
-                return callback(new Error('_请输入_0~20_之间的数字_'));
-              }
-            else if (isNaN(value)) {
-               callback(new Error('_请输入_0~20_之间的数字_'));
-            } else if(value>20||value<0){
+            var par3=/^[0-9]+(.[0-9]{1})?$/ ;   //带1位小数的正实数：
+            if(!par3.test(value)||(value>20)||(value<=0)){
               callback(new Error('_请输入_0~20_之间的数字_'));
-            }else {
-               callback();
-            }
+            }else{
+              callback();
+            } 
         };
         const checkFatTime = (rule,value,callback) => {   //疲劳休息时长
-            if(!value) {
+            /*if(!value) {
                 return callback(new Error('_请输入_0~40_之间的数字_'));
               }
             else if (isNaN(value)) {
@@ -1106,42 +1085,36 @@
               callback(new Error('_请输入_0~40_之间的数字_'));
             }else {
                callback();
-            }
+            }*/
+            var par4=/^[0-9]+(.[0-9]{1})?$/ ;   //带1位小数的正实数：
+            if(!par4.test(value)||(value>40)||(value<=0)){
+              callback(new Error('_请输入_0~40_之间的数字_'));
+            }else{
+              callback();
+            } 
         };
         const checkFat = (rule,value,callback) => {   //疲劳时长
-            if(!value) {
-                return callback(new Error('_请输入_0~240_之间数字_'));
-            }
-            if (isNaN(value)) {
-               callback(new Error('_请输入_0~240__之间数字_'));
-            } else if(value>240||value<0){
-              callback(new Error('_请输入_0~240_之间数字_'));
-            }else {
-               callback();
+            var par5=/^[0-9]+(.[0-9]{1})?$/ ;   //带1位小数的正实数：
+            if(!par5.test(value)||(value>240)||(value<=0)){
+              callback(new Error('_请输入_0~240_之间的数字_'));
+            }else{
+              callback();
             }
         };
         const checkMaxTyre = (rule,value,callback) => {  //胎压
-            if(!value) {
-                return callback(new Error('_请输入_7~13_之间数字_'));
-            }
-            if (isNaN(value)) {
-               callback(new Error('_请输入_7~13_之间数字_'));
-            } else if(value>13||value<7){
-              callback(new Error('_请输入_7~13_之间数字_'));
-            }else {
-               callback(); 
+            var par6=/^[0-9]+(.[0-9]{1})?$/ ;   //带1位小数的正实数：
+            if(!par6.test(value)||(value>13)||(value<7)){
+              callback(new Error('_请输入_7~13_之间的数字_'));
+            }else{
+              callback();
             }
         };
         const checkMaxTem = (rule,value,callback) => {  //胎温
-            if(!value) {
-                return callback(new Error('_请输入不大于_100_的数字_'));
-            }
-            if (isNaN(value)) {
-               callback(new Error('_请输入不大于_100_的数字_'));
-            } else if(value>100){
+            var par7=/^(\-)?\d+(\.\d{1})?$/;
+            if(!par7.test(value)||(value>100)){
               callback(new Error('_请输入不大于_100_的数字_'));
-            }else {
-               callback();
+            }else{
+              callback();
             }
         }; 
 			return {

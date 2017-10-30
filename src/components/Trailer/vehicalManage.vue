@@ -399,7 +399,7 @@
                 <el-input v-model="objDetail.FFuelConsume"></el-input>
               </el-form-item>
               <el-form-item label="_油箱体积_(m³)" prop="FTankVolume">
-                <el-input v-model.number="objDetail.FTankVolume"></el-input>
+                <el-input v-model="objDetail.FTankVolume"></el-input>
               </el-form-item>
               <div style='height:30px;margin-top:10px;cursor:pointer' @click='moreDetail'>
                  <!-- <div style='display:inline-block;position:relative;left:100px'>
@@ -409,16 +409,16 @@
               </div>
               <div v-if='view'>
               <el-form-item label="_车身长度_(m)" prop="FLength">
-               <el-input v-model.number="objDetail.FLength"></el-input>
+               <el-input v-model="objDetail.FLength"></el-input>
               </el-form-item>
               <el-form-item label="_吨位_(t)" prop="FTonnage">
-                <el-input v-model.number="objDetail.FTonnage"></el-input>
+                <el-input v-model="objDetail.FTonnage"></el-input>
               </el-form-item>
               <el-form-item label="_车架号_" prop="FVIN">
                 <el-input v-model="objDetail.FVIN"></el-input>
               </el-form-item>
               <el-form-item label="_座位数量_(_个_)" prop="FSeatCount">
-                <el-input v-model.number="objDetail.FSeatCount"></el-input>
+                <el-input v-model="objDetail.FSeatCount"></el-input>
               </el-form-item>
               <el-form-item label="_描述_" prop="FDescription" >
                 <el-input type="textarea" v-model="objDetail.FDescription" :maxlength="200" :rows="2"
@@ -455,7 +455,7 @@
                 <el-input v-model="objDetail.FRoadTranNumber"></el-input>
               </el-form-item>
               <el-form-item label="_最大砼容量_(m³)" prop="FMaxVariaLoad">
-               <el-input v-model.number="objDetail.FMaxVariaLoad"></el-input>
+               <el-input v-model="objDetail.FMaxVariaLoad"></el-input>
               </el-form-item>
               <el-form-item label="_技术登记有效期_" prop="FTechRegDate">
                 <el-date-picker type="date" placeholder="_选择日期_"   v-model="objDetail.FTechRegDate" style="width: 100%;"></el-date-picker>
@@ -557,7 +557,7 @@
                   <el-input v-model="ruleForm.FFuelConsume"></el-input>
                 </el-form-item>
               <el-form-item label="_油箱体积_(m³)" prop="FTankVolume">
-                  <el-input v-model.number="ruleForm.FTankVolume"></el-input>
+                  <el-input v-model="ruleForm.FTankVolume"></el-input>
                 </el-form-item>
               <div style='height:30px;margin-top:10px;cursor:pointer' @click='moreDetail'>
                  <!-- <div style='display:inline-block;position:relative;left:100px'>
@@ -568,16 +568,16 @@
               <div v-if='view'>
 
                 <el-form-item label="_车身长度_(m)" prop="FLength">
-               <el-input v-model.number="ruleForm.FLength"></el-input>
+               <el-input v-model="ruleForm.FLength"></el-input>
               </el-form-item>
                 <el-form-item label="_吨位_(t)" prop="FTonnage">
-                  <el-input v-model.number="ruleForm.FTonnage"></el-input>
+                  <el-input v-model="ruleForm.FTonnage"></el-input>
                 </el-form-item>
                 <el-form-item label="_车架号_" prop="FVIN">
                   <el-input v-model="ruleForm.FVIN"></el-input>
                 </el-form-item>
                 <el-form-item label="_座位数量_(_个_)" prop="FSeatCount">
-                  <el-input v-model.number="ruleForm.FSeatCount"></el-input>
+                  <el-input v-model="ruleForm.FSeatCount"></el-input>
                 </el-form-item>
                 <el-form-item label="_描述_" prop="FDescription" >
                  <el-input type="textarea" v-model="ruleForm.FDescription" :maxlength="200" :rows="2"
@@ -619,7 +619,7 @@
                   <el-input v-model="ruleForm.FRoadTranNumber"></el-input>
                 </el-form-item>
                 <el-form-item label="_最大砼容量_(m³)" prop="FMaxVariaLoad">
-               <el-input v-model.number="ruleForm.FMaxVariaLoad"></el-input>
+               <el-input v-model="ruleForm.FMaxVariaLoad"></el-input>
               </el-form-item>
                 <el-form-item label="_技术登记有效期_" prop="FTechRegDate">
                   <el-date-picker type="date" placeholder="_选择日期_"   v-model="ruleForm.FTechRegDate" style="width: 100%;"></el-date-picker>
@@ -789,28 +789,27 @@
   export default {
     data() {
       const checkNum = (rule, value, callback) => {
-              /*if (!value) {
-                return callback(new Error('年龄不能为空'));
-                console.log(value)
-              }*/
-                if (value && !Number.isInteger(value)) {
-                  callback(new Error('_请输入正整数_'));
-                } else {
-                  if (value && value < 0) {
-                    callback(new Error('_请输入正整数_'));
-                  } else {
-                    callback();
-                  }
-                }
-            };
+        var par1=/^[0-9]\d*$/ ;   //非负整数：
+        if((value!=='')&&(!par1.test(value))){
+          callback(new Error('_请输入正整数_'));
+        }else{
+          callback();
+        }
+      };
       const checkdata = (rule,value,callback) => {
-            if (isNaN(value)) {
+            /*if (isNaN(value)) {
                callback(new Error('_请输入数字_'));
             } else if(value<0){
               callback(new Error('_负数无效_'));
             }else {
                callback();
-            }
+            }*/
+          var par3=/^[0-9]+(.[0-9]{1})?$/ ;   //带1位小数的正实数：
+          if(!par3.test(value)){
+            callback(new Error('_请输入数字_'));
+          }else{
+            callback();
+          } 
         };
       _this=this;
       return {
@@ -968,9 +967,10 @@
           // FDriverName: [{required: true, message: '_请选择司机_'}],
           FSeatCount: [{ validator: checkNum }],
           FLength: [{ validator: checkdata }],
-          FMaxVariaLoad: [{ validator: checkdata }],
+          FMaxVariaLoad: [{ validator: checkNum }],
           FTankVolume: [{ validator: checkNum }],
-          FTonnage: [{ validator: checkdata }],
+          FTonnage: [{ validator: checkNum }],
+          FFuelConsume: [{ validator: checkNum }],
         },
         dialogVisible: false,
         addEquipment: false,

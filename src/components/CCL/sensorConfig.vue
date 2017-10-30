@@ -31,7 +31,7 @@
             <li><h1>4</h1><p>ID：<input type="text" v-model="SensorObj.FSensorID4"></p><p>时间：{{SensorObj.FSensor4GPSDateTime}}</p><p>温度：{{SensorObj.FTemperature4}}°C</p><p>湿度：{{SensorObj.FHumidity4}}%</p><p>电量：{{SensorObj.FBattery4}}%</p></li>
           </ul>
         </div>
-        <div class="saveConfig" >
+        <div class="saveConfig">
           <div class="carImgContainer">
             <img src="/static/img/position-tem.png" alt="">
           </div>

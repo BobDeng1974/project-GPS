@@ -13,7 +13,7 @@
 				<car-tree v-if="systemID!=2" ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
 						  @node-click="getChoiceCarData"></car-tree>
 				<!--电子锁车辆列表-->
-				<car-tree v-if="systemID==2" ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
+				<car-tree v-if="systemID==2" ref='tree' :treeData="lockData" :options="options" @refresh="loadTreeData"
 						  @node-click="getChoiceCarData"></car-tree>
 <!--
 				<div id="lockList" class="carTeamList" v-if="systemID==2">
@@ -1219,9 +1219,14 @@
 					if (_this.$store.state.allCarsList.length == 0) {
 						_this.$refs.map.showError("_暂无车辆数据_");
 					}
-					_this.allCarsArr = _this.$store.state.allCarsList;
-					_this.treeData = _this.deepCopy(_this.$store.state.allCarsData);
-
+					if (_this.systemID == 2){
+						_this.allCarsArr = _this.$store.state.allLockList;   //原始锁列表
+						_this.lockData = _this.deepCopy(_this.$store.state.mapLocksData);  //地图树形 锁列表
+						//_this.noLockVehicle = _this.$store.state.noLockVehicle;  //未绑定车辆的 锁列表
+					}else {
+						_this.allCarsArr = _this.$store.state.allCarsList;   //原始车辆列表
+						_this.treeData = _this.deepCopy(_this.$store.state.allCarsData); //地图树形 车辆列表
+					}
 				}
 
 			},
@@ -1449,7 +1454,6 @@
 							break;
 					}
 
-
 					let postData={
 						FTokenID: _this.$store.state.FTokenID,
 						FAction: action,
@@ -1478,19 +1482,20 @@
 							};
 							if (res.Result == 200) {
 								let Arr;
+
 								switch (_this.systemID){
 								    case 1:
-										initData= initData.concat(res.FObject);
+										if(res.FObject.length!=0) initData= initData.concat(JSON.hunpack(eval(res.FObject),4));
 								        break;
 								    case 2:
-										initData= initData.concat(res.FObject);
+										if(res.FObject.length!=0) initData= initData.concat(JSON.hunpack(eval(res.FObject),4));
 								        break;
 									case 3:
 										info=res.FObject.Table[0],
 										initData= initData.concat(res.FObject.Table1);
 										break;
 									case 4:
-										initData= initData.concat(JSON.hunpack(eval(res.FObject),4));
+										if(res.FObject.length==0) initData= initData.concat(JSON.hunpack(eval(res.FObject),4));
 										break;
 								}
 							};
@@ -1511,7 +1516,7 @@
 							num++;
 							if(num==choiceTime.length){
 								console.log("总的原始数据",initData);
-								if (initData == 0) {
+								if (initData.length == 0) {
 									_this.$refs.map.showError("暂无轨迹点数据");
 									return
 								} else {

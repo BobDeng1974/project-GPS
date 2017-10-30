@@ -440,6 +440,7 @@
                   var Fobj=data;
                   if(Fobj.FObject.length!=0){
                     $(".mymodal").css('visibility', 'visible');
+                    data.FObject=JSON.hunpack(eval(data.FObject), 4);
                     $.each(Fobj.FObject, function (index, obj) {
                       if(obj.FLongitude!=0&&obj.FLatitude!=0){
                         let point=_this.parsePointBD(new BMap.Point(obj.FLongitude,obj.FLatitude));

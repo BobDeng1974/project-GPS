@@ -58,7 +58,6 @@ const mutations={
 				FAction: "QueryLBSAssetListByFUserGUID",
 				FVersion: "1.0.0"
 			};
-
 			//电子锁系统下 先请求锁数据 （同步请求）
 			$.ajax({
 				url: "/web/Lock/Lock_LBS",
@@ -99,7 +98,6 @@ const mutations={
 
 				}
 			});
-
 		}
 
 
@@ -117,11 +115,13 @@ const mutations={
 				    temp = [],    //公司对象容器
 				    temp1 = [],   //车队对象容器
 				    temp2 = [],   //车辆对象容器
-				    temp3 = [],   //未绑定电子锁车辆对象容器
+				    temp3 = [],   //绑定车辆电子锁车辆对象容器
+				    temp4 = [],   //未绑定电子锁车辆对象容器
 				    idArr = [],   //公司ID容器
 				    idArr1 = [],  //车队ID容器
 				    idArr2 = [],  //车辆ID容器
-				    idArr3 = [];  //未绑定电子锁车辆ID容器
+				    idArr3 = [],  //绑定车辆电子锁车辆ID容器
+				    idArr4 = [];  //未绑定电子锁车辆ID容器
 
 				//设定顶级公司名称
 				let mainCompany={
@@ -131,7 +131,7 @@ const mutations={
 
 				//第er次遍历 编译公司 车队 车辆数据
 				//@A 表示顶级公司  @B 表示二级公司 @C 表示所有车队
-				$.each(res.FObject, function (i, item) {
+				$.each(res.FObject, function (i, item)  {
 
 					if (item.FSystemType == state.choiceSystemID || item.FSystemType == 0 ) {
             		    data.push(item);
@@ -218,24 +218,55 @@ const mutations={
 						}
 
 						//console.log(carFatherID, item.FVehicleName);
-						let obj2=null;
 
+
+						//车辆对象 (非电子锁系统)
+						let obj2 = {
+							id: item.FGUID,
+							label: item.FVehicleName,
+							FAssetGUID: item.FAssetGUID,
+							parentId:carFatherID,
+							FAlarmOffLine: item.FAlarmOffLine,
+							FCamera: item.FCamera,
+							FRFID: item.FRFID,
+							FScreen: item.FScreen,
+							FStatus: item.FStatus,
+							FTHS: item.FTHS,
+							FTPMS: item.FTPMS,
+							FVideo: item.FVideo,
+							ISConfigSensorid: item.ISConfigSensorid,
+							IsConfigFuel:item.FIsConfigFuel,
+							FVehicleSerialCode: item.FVehicleSerialCode,
+							open: true,
+							checked: false,
+							nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
+							visible: true,
+							searched: false,
+							message: null,
+							iconType:0, //图标类型 0车 1锁
+						}
+						if (obj2!=null && idArr2.indexOf(obj2.id) == -1 && obj2.id != null&&obj2.FStatus) {
+							idArr2.push(obj2.id);
+							temp2.push(obj2)
+						};
+
+
+						let obj3=null;
 						if(state.choiceSystemID==2){
 
 							if(vehicleIDArr.indexOf(item.FGUID)!=-1){
-
+								//过滤绑定车辆的电子锁
 								let n=vehicleIDArr.indexOf(item.FGUID);
-
 								//vehicleIDArr.splice(n,1)   //测试数据用
 								//console.log(vehicleIDArr); //测试数据用
 								let data=lockObj[item.FGUID];
 								//锁对象 (电子锁系统)
-								obj2 = {
+								obj3 = {
 									id: data.FAssetGUID,
 									label:data.FAssetID,
 									subLabel:data.FVehicleName==null?'':data.FVehicleName,
 									FVehicleGUID: data.FVehicleGUID,
-									parentId:carFatherID,
+									parentId:"@A",
 									FAlarmOffLine: 0,
 									FCamera: 0,
 									FRFID: 0,
@@ -255,12 +286,13 @@ const mutations={
 									message: null,
 									iconType:1, //图标类型 0车 1锁
 								}
-								if (obj2!=null && idArr2.indexOf(obj2.id) == -1 && obj2.id != null) {
-									idArr2.push(obj2.id);
-									temp2.push(obj2)
+								if (obj3!=null && idArr3.indexOf(obj3.id) == -1 && obj3.id != null) {
+									idArr3.push(obj3.id);
+									temp3.push(obj3)
 								};
 							}else {
-								obj2 = {
+								//未绑定车辆的电子锁
+								obj3 = {
 									id: item.FGUID,
 									label: item.FVehicleName,
 									FAssetGUID: item.FAssetGUID,
@@ -284,47 +316,17 @@ const mutations={
 									message: null,
 									iconType:0, //图标类型 0车 1锁
 								}
-								if (obj2!=null && idArr2.indexOf(obj2.id) == -1 && obj2.id != null&&obj2.FStatus) {
-									idArr3.push(obj2.id);
-									temp3.push(obj2)
+								if (obj3!=null && idArr4.indexOf(obj3.id) == -1 && obj3.id != null) {
+									idArr4.push(obj3.id);
+									temp4.push(obj3)
 								};
 
 							}
-						}else{
-							//车辆对象 (非电子锁系统)
-							obj2 = {
-								id: item.FGUID,
-								label: item.FVehicleName,
-								FAssetGUID: item.FAssetGUID,
-								parentId:carFatherID,
-								FAlarmOffLine: item.FAlarmOffLine,
-								FCamera: item.FCamera,
-								FRFID: item.FRFID,
-								FScreen: item.FScreen,
-								FStatus: item.FStatus,
-								FTHS: item.FTHS,
-								FTPMS: item.FTPMS,
-								FVideo: item.FVideo,
-								ISConfigSensorid: item.ISConfigSensorid,
-								IsConfigFuel:item.FIsConfigFuel,
-								FVehicleSerialCode: item.FVehicleSerialCode,
-								open: true,
-								checked: false,
-								nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
-								visible: true,
-								searched: false,
-								message: null,
-								iconType:0, //图标类型 0车 1锁
-							}
-							if (obj2!=null && idArr2.indexOf(obj2.id) == -1 && obj2.id != null&&obj2.FStatus) {
-								idArr2.push(obj2.id);
-								temp2.push(obj2)
-							};
 						}
+
 					}
 				});
 				//将剩余未绑定车辆的锁加入列表
-
 				if(state.choiceSystemID==2 && lockArr.length!=0){
 					lockArr.map(function(item,index){
 						let obj = {
@@ -332,7 +334,7 @@ const mutations={
 							label:item.FAssetID,
 							subLabel:item.FVehicleName==null?'':item.FVehicleName,
 							FVehicleGUID: item.FVehicleGUID,
-							parentId:"@A" + mainCompany.ID,
+							parentId:"@A",
 							FAlarmOffLine: 0,
 							FCamera: 0,
 							FRFID: 0,
@@ -352,24 +354,40 @@ const mutations={
 							message: null,
 							iconType:1, //图标类型 0车 1锁
 						}
-						temp2.push(obj);
+						temp3.push(obj);
 					})
 				}
 
 				state.allCarsList = data;      //本系统下车辆原始数据
 				//console.log("本系统全部车辆列表",data);
+                //公共部分  系统车辆列表
 				let newArrA=[];
-                let team=JSON.parse(JSON.stringify(newArrA.concat(temp,temp1)));
-                state.allCarTeam = transTreeData(team);
-
-
+				let team=JSON.parse(JSON.stringify(newArrA.concat(temp,temp1)));
+				state.allCarTeam = transTreeData(team);
 				state.allCarsData = transTreeData(JSON.parse(JSON.stringify(newArrA.concat(temp,temp1,temp2))));
 				console.log("车辆列表",state.allCarsData);
 
-
 				if(state.choiceSystemID==2){
+					//电子锁系统  锁列表
+					let obj = {
+						id: "@A",
+						label: state.FShortName,
+						parentId:0,
+						count:temp3.length,
+						open: true,
+						checked: false,
+						nodeSelectNotAll: false,//新增参数，表示父框可以半钩状态
+						visible: true,
+						searched: false,
+						children:temp3,
+						rootType:1
+					};
+
+					state.mapLocksData=[];
+					state.mapLocksData.push(obj);
+
 					let newArrB=[];
-					state.noLockVehicle = transTreeData(JSON.parse(JSON.stringify(newArrB.concat(temp,temp1,temp3))));
+					state.noLockVehicle = transTreeData(JSON.parse(JSON.stringify(newArrB.concat(temp,temp1,temp4))));
 					console.log("未绑定电子锁车辆列表",state.noLockVehicle);
 				}
 
@@ -400,7 +418,12 @@ const mutations={
 									_obj.count +=1
 								}
 							})
-							_arr.push(_obj);
+							//进行一个简单的排序 有内容的unshift 没内容的push
+							if(_obj.count!=0){
+								_arr.unshift(_obj);
+							}else {
+								_arr.push(_obj);
+							}
 						}
 					}
 					return _arr;
@@ -431,8 +454,6 @@ const mutations={
 					}
 				]
 
-				//console.log('地图树形数据', state.mapLocksData)
-				//console.log('其他树形数据', state.allLocksData)
 				if (callback != null && callback != "") {
 					callback();
 				}

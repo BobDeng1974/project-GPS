@@ -10,7 +10,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h5 class="modal-title" id="myModalLabel">_请选择需要添加的车辆曲线图_</h5>
 					</div>
-					<div class="modal-body" style="height: 100%">
+					<div class="modal-body home-modal-body" style="height: 100%">
 						<ul>
 							<li v-for="value in filterLineChartArr">
 								<label>{{value|translate1}}</label>
@@ -34,7 +34,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h5 class="modal-title" id="myModalLabe2">_请选择需要添加的车辆环形比例图_</h5>
 					</div>
-					<div class="modal-body" style="height: 100%">
+					<div class="modal-body home-modal-body" style="height: 100%">
 						<ul>
 							<span v-if="!filterAnnularChartArr.length">_没有可添加的项_</span>
 							<li v-for="value in filterAnnularChartArr"><label>{{value|translate2}}</label><input
@@ -2507,18 +2507,18 @@
     height:50px;
   }
 
-  .modal-body {
+  .home-modal-body {
     padding:0px 15px;
   }
 
-  .modal-body ul li {
+  .home-modal-body ul li {
     height:40px;
     line-height:30px;
     padding:4px;
     border-bottom:1px solid #cccccc;
   }
 
-  .modal-body ul li input {
+  .home-modal-body ul li input {
     width:16px;
     height:16px;
   }

@@ -275,6 +275,13 @@
       },
       //修改密码（多个）
       async changePsds(){
+        if(_this.multipleSelection.length==0){
+          _this.$message({
+            showClose: true,
+            message: '_请选择设备_',
+            type: 'warning'
+          });
+        }
            $.each(_this.multipleSelection,async function (index,obj) {
              let i=0;
              let b;

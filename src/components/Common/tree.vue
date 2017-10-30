@@ -1,6 +1,6 @@
 <template>
 	<div class="halo-tree">
-		<div class="search-module" id="tree-header">
+		<div class="search-module tree-header" id="tree-header">
 			<input type="text" class="input-custom no-border search-car-input" placeholder="_请输入关键字_" v-model="search">
 			<span class="search-car-btn"><i class="fa fa-search fa-lg"></i></span>
 			<span @click="refreshCarData" class="refresh-car-btn"><i class="fa fa-refresh fa-lg"></i></span>
@@ -41,7 +41,7 @@
 				if(val=="") {
 					this.treeData[0].open=true;
 					this.treeData[0].children.map(function(item,index){
-						if(item.rootType){
+						if(!item.rootType){
 							item.open=false
 						}
 					})
@@ -119,7 +119,9 @@
 		background: -ms-linear-gradient(top, #fbfbfb 0%, #e4e4e4 100%);
 		background: linear-gradient(to bottom, #fbfbfb 0%, #e4e4e4 100%);
 	}
-
+	.tree-header{
+		position:relative;
+	}
 	.search-car-btn {
 		position:absolute;
 		left:5px;

@@ -1575,6 +1575,7 @@
                 return
               }else if(data.Result==200){
                 var Fobj=data;
+                Fobj.FObject=JSON.hunpack(eval(Fobj.FObject),4)
                 if(Fobj.FObject.length!=0){
                   $(".mymodal").css('visibility', 'visible');
                   $.each(Fobj.FObject, function (index, obj) {
@@ -1636,6 +1637,7 @@
                     return
                   }else if(data.Result==200){
                     var Fobj=data;
+                    Fobj.FObject=JSON.hunpack(eval(Fobj.FObject),4)
                     if(Fobj.FObject.length!=0){
                       positionArr=positionArr.concat(Fobj.FObject);
                       resove();

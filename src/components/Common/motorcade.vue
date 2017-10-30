@@ -108,7 +108,7 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="_车队长姓名_" prop="FMasterName" label-width="160px">
-								<el-input v-model.number="objDetail.FMasterName"></el-input>
+								<el-input v-model="objDetail.FMasterName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="2"></el-col>
@@ -161,7 +161,7 @@
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="_车队长姓名_" prop="FMasterName" label-width="160px">
-							<el-input v-model.number="ruleForm.FMasterName"></el-input>
+							<el-input v-model="ruleForm.FMasterName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="2"></el-col>

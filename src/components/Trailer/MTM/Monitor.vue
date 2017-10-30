@@ -1,16 +1,17 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml">
-	<div id="map-template" class="map-template" :class="{'full-screen':IsActive.isFullScreen,'':!IsActive.isFullScreen}">
+	<div id="map-template" class="map-template"
+		 :class="{'full-screen':IsActive.isFullScreen,'':!IsActive.isFullScreen}">
 
 
 		<!--弹框-->
-		<div class="modal fade carChoiselist" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+		<div v-if="systemID==2" class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
 			 aria-hidden="true">
-			<div class="modal-dialog">
+			<div class="modal-dialog map-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" >&times;</button>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel" style="color: white">
-							ID:{{FAssetID}}——{{FVehicleName}}</h4>
+							ID:&nbsp;&nbsp;{{FAssetID}}&nbsp;&nbsp;【&nbsp;{{FVehicleName}}&nbsp;】</h4>
 					</div>
 					<div class="modal-body">
 						<el-input
@@ -20,27 +21,27 @@
 						<el-tree
 							class="filter-tree"
 							:data="noLockVehicle"
-							:highlight-current="true"
 							:props="defaultProps"
+							:highlight-current="true"
 							default-expand-all
+							:expand-on-click-node="false"
 							:filter-node-method="filterNode1"
+							:render-content="renderContent"
 							@node-click="handleNodeClick"
 							ref="tree1">
 						</el-tree>
-						<div class="bingCar"
-							 style="height: 300px;width: 270px;position: absolute;top: 30px;display: none;padding-top: 50px">
-							<p style="color: #cccccc;font-size: 40px;margin-left: 110px;"><i
-								class="el-icon-warning"></i></p>
-							<p style="text-indent: 10px;padding: 10px;">_没有您输入的车辆_，_请前往车辆管理新增车辆_</p>
+						<div class="bingCar">
+							<p>
+								<i class="el-icon-warning"></i>
+							</p>
+							<p>_没有您输入的车辆_，_请前往车辆管理新增车辆_</p>
 							<button @click="sendLink({	tabsText: '_车辆管理_',router: 'vehicalmanage'},'')"
-									style="background: white;border:1px solid #1a70ce;color:#1a70ce;width: 120px;height: 26px;margin-top: 30px;margin-left: 80px;"
 									data-dismiss="modal"><i class="el-icon-plus">_新增车辆_</i></button>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary " data-dismiss="modal" @click="bingVehicle">_确认_
-						</button>
-						<button type="button" class="btn btn-primary " data-dismiss="modal">_取消_</button>
+						<button type="button" class="btn btn-primary" @click="bingVehicle">_确认_</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">_取消_</button>
 					</div>
 				</div>
 			</div>
@@ -51,7 +52,8 @@
 				   :fa-data="[mapToolShow,isShowAreaSearch]"></baidu-map>
 		<!--锁图标-->
 		<div class="lockBtns" v-if="systemID==2">
-			<button class="unlockBtn" @click="handleLockStatus(1)" title="_只选择开锁设备_"><i class="fa fa-unlock"></i></button>
+			<button class="unlockBtn" @click="handleLockStatus(1)" title="_只选择开锁设备_"><i class="fa fa-unlock"></i>
+			</button>
 			<button class="lockBtn" @click="handleLockStatus(0)" title="_只选择上锁设备_"><i class="fa fa-lock"></i></button>
 		</div>
 		<!--右侧选择车辆-->
@@ -63,7 +65,7 @@
 			<car-tree v-if="systemID!=2" ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
 					  @choiceCarId="handlecheckedChange" @node-click="handlecheckedChange"></car-tree>
 			<!--电子锁车辆列表-->
-			<car-tree v-if="systemID==2" ref='tree' :treeData="treeData" :options="options" @refresh="loadTreeData"
+			<car-tree v-if="systemID==2" ref='tree' :treeData="lockData" :options="options" @refresh="loadTreeData"
 					  @choiceCarId="handlecheckedChange" @node-click="handlecheckedChange"></car-tree>
 
 			<!--<div class="carTeamList" v-if="systemID==2">
@@ -349,503 +351,557 @@
 							<table class="table table-striped table-bordered table-hover">
 								<!--非报警部分-->
 								<tbody v-show="carDataType<4">
-									<!--接甩挂系统-->
-									<tr v-if="systemID==1" v-for="(item,index) in filterCarName">
-										<td width="5%" class="text-black">{{index+1}}</td>
-										<td width="10%" @click="showCarPlace(filterCarName,index)"
-											class="hover-underline cursor-pointer"
-											:class="{'list-active':item.active,
+								<!--接甩挂系统-->
+								<tr v-if="systemID==1" v-for="(item,index) in filterCarName">
+									<td width="5%" class="text-black">{{index+1}}</td>
+									<td width="10%" @click="showCarPlace(filterCarName,index)"
+										class="hover-underline cursor-pointer"
+										:class="{'list-active':item.active,
 												'text-red':item.type==3,
 												'text-grey':item.alarmOffLine==1&&item.type!=3,
 												'text-green':item.alarmOffLine!=1&&item.speed>0&&item.type!=3,
 												'text-yellow':item.alarmOffLine!=1&&item.speed==0&&item.type!=3}">
-											{{item.name}}
-										</td>
-										<td width="15%">{{item.time}}</td>
-										<td width="5%">
-											<i class="img-icon" :class="{'green-light':item.locationType,'red-light':!item.locationType}" :title="item.locationType?'_定位_':'_不定位_'"></i>
-										</td>
-										<td width="10%">
-											<span v-show="item.couplingStatus!=1 && item.couplingStatus!=0">--</span>
-											<i v-show="item.couplingStatus==1 || item.couplingStatus==0" class="img-icon"
-											   :class="{'online-coupling':item.couplingStatus==1&&item.alarmOffLine!=1,
+										{{item.name}}
+									</td>
+									<td width="15%">{{item.time}}</td>
+									<td width="5%">
+										<i class="img-icon"
+										   :class="{'green-light':item.locationType,'red-light':!item.locationType}"
+										   :title="item.locationType?'_定位_':'_不定位_'"></i>
+									</td>
+									<td width="10%">
+										<span v-show="item.couplingStatus!=1 && item.couplingStatus!=0">--</span>
+										<i v-show="item.couplingStatus==1 || item.couplingStatus==0" class="img-icon"
+										   :class="{'online-coupling':item.couplingStatus==1&&item.alarmOffLine!=1,
 											   'online-unCoupling':item.couplingStatus==0&&item.alarmOffLine!=1,
 											   'offline-Coupling':item.couplingStatus==1&&item.alarmOffLine==1,
 											   'offline-unCoupling':item.couplingStatus==0&&item.alarmOffLine==1}"
-											   :title="item.couplingStatusTitle"></i>
+										   :title="item.couplingStatusTitle"></i>
 
-										</td>
-										<td width="10%">
+									</td>
+									<td width="10%">
 
-											<span v-show="item.isHaveTyreContent==0">--</span>
+										<span v-show="item.isHaveTyreContent==0">--</span>
 
-											<el-popover v-show="item.isHaveTyreContent==1"
-														placement="top"
-														width="460"
-														offset="350"
-														popper-class="popover-box"
-														trigger="click">
+										<el-popover v-show="item.isHaveTyreContent==1"
+													placement="top"
+													width="460"
+													offset="350"
+													popper-class="popover-box"
+													trigger="click">
 
-												<span  @click="getCarTireData(item)" slot="reference">
+												<span @click="getCarTireData(item)" slot="reference">
 													<i class="img-icon carChoiceList-icon ChoiceListIcon-3a cursor-pointer"></i>
 												</span>
 
-												<div style="min-height:400px">
-													<table  class="popover-table" width="100%">
-														<thead>
-															<tr>
-																<th colspan="2">_设备_ID:{{item.tireData.ID}}</th>
-																<th colspan="2">_上传时间_:{{item.tireData.time}}</th>
-															</tr>
-															<tr>
-																<th width="10%">_序号_</th>
-																<th width="20%">_胎压_(Bar)</th>
-																<th width="20%">_胎温_(℃)</th>
-																<th width="50%">_状态_</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr v-for="value in item.tireData.data">
-																<td align="center">{{value.N}}</td>
-																<td align="center">{{value.P}}</td>
-																<td align="center">{{value.T}}</td>
-																<td align="left">
-																	&nbsp;&nbsp;{{value.state}}
-																</td>
-															</tr>
-														</tbody>
-													</table>
-													<div class="popover-img img-tire"></div>
-												</div>
-											</el-popover>
+											<div style="min-height:400px">
+												<table class="popover-table" width="100%">
+													<thead>
+													<tr>
+														<th colspan="2">_设备_ID:{{item.tireData.ID}}</th>
+														<th colspan="2">_上传时间_:{{item.tireData.time}}</th>
+													</tr>
+													<tr>
+														<th width="10%">_序号_</th>
+														<th width="20%">_胎压_(Bar)</th>
+														<th width="20%">_胎温_(℃)</th>
+														<th width="50%">_状态_</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr v-for="value in item.tireData.data">
+														<td align="center">{{value.N}}</td>
+														<td align="center">{{value.P}}</td>
+														<td align="center">{{value.T}}</td>
+														<td align="left">
+															&nbsp;&nbsp;{{value.state}}
+														</td>
+													</tr>
+													</tbody>
+												</table>
+												<div class="popover-img img-tire"></div>
+											</div>
+										</el-popover>
 
-										</td>
-										<td width="5%">{{item.speed}}</td>
-										<td width="10%">{{item.mileage}}</td>
-										<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
-											{{item.batteryPercent}}
-										</td>
-										<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
+									</td>
+									<td width="5%">{{item.speed}}</td>
+									<td width="10%">{{item.mileage}}</td>
+									<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
+										{{item.batteryPercent}}
+									</td>
+									<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
 											<span v-show="item.address!='_获取位置_'" class="text-nowrap-165"
 												  :title="item.address">{{item.address}}</span>
 											<span v-show="item.address=='_获取位置_'" @click="getAddress(item)"
 												  class="text-blue hover-underline cursor-pointer">{{item.address}}</span>
-										</td>
-										<td width="10%">
-											<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info" title="查看详情"></a>
-										</td>
+									</td>
+									<td width="10%">
+										<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info"
+										   title="查看详情"></a>
+									</td>
 
-									</tr>
-									<!--电子锁系统-->
-									<tr v-if="systemID==2" v-for="(item,index) in filterCarName">
-										<td width="5%" class="text-black">{{index+1}}</td>
-										<td width="10%" @click="showCarPlace(filterCarName,index)"
-											class="hover-underline cursor-pointer"
-											:class="{'list-active':item.active,
+								</tr>
+								<!--电子锁系统-->
+								<tr v-if="systemID==2" v-for="(item,index) in filterCarName">
+									<td width="5%" class="text-black">{{index+1}}</td>
+									<td width="10%" @click="showCarPlace(filterCarName,index)"
+										class="hover-underline cursor-pointer"
+										:class="{'list-active':item.active,
 												'text-red':item.type==3,
 												'text-grey':item.alarmOffLine==1&&item.type!=3,
 												'text-green':item.alarmOffLine!=1&&item.speed>0&&item.type!=3,
 												'text-yellow':item.alarmOffLine!=1&&item.speed==0&&item.type!=3}">
-											{{item.ID}}</td>
-										<td width="10%" align="left">&nbsp;&nbsp;
-											<a data-toggle="modal" data-target="#modal" @click="beforebingVehicle(item.ID,item.FAssetGUID,item.name,item.FVehicleGUID)">
-												<i class="fa fa-unlink" style="font-size: 14px;margin-right: 10px" title="绑定车辆"></i>
-											</a>
-											<span>{{item.name}}</span>
-										</td>
-										<td width="5%">
-											<!--<i :class="{'fa':true,'fa-lock':!item.FLockStatus,'fa-unlock':item.FLockStatus}" style="font-size: 18px"></i>-->
-											<span v-if="item.attitude==null">--</span>
-											<el-popover v-if="item.attitude!=null"
-												        placement="top-start"
-														width="460"
-														offset="350"
-														popper-class="popover-box"
-														trigger="hover"
-														:disabled="item.attitude==0">
-												<i slot="reference" class="img-icon lock-state" :class="{'normal-lock':!item.FLockStatus&&item.attitude<=1,
+										{{item.ID}}
+									</td>
+									<td width="10%" align="left">&nbsp;&nbsp;
+										<a data-toggle="modal" data-target="#modal"
+										   @click="beforebingVehicle(item)">
+											<i class="fa fa-unlink" style="font-size: 14px;margin-right: 10px"
+											   title="绑定车辆"></i>
+										</a>
+										<span>{{item.name}}</span>
+									</td>
+									<td width="5%">
+										<!--<i :class="{'fa':true,'fa-lock':!item.FLockStatus,'fa-unlock':item.FLockStatus}" style="font-size: 18px"></i>-->
+										<span v-if="item.attitude==null">--</span>
+										<el-popover v-if="item.attitude!=null"
+													placement="top-start"
+													width="460"
+													offset="350"
+													popper-class="popover-box"
+													trigger="hover"
+													:disabled="item.attitude==0">
+											<i slot="reference" class="img-icon lock-state" :class="{'normal-lock':!item.FLockStatus&&item.attitude<=1,
 													'abnormal-lock':!item.FLockStatus&&item.attitude>1,
 													'normal-unlock':item.FLockStatus&&item.attitude<=1,
 													'abnormal-unlock':item.FLockStatus&&item.attitude>1}"
-													:title="item.FLockStatus?'_开锁_':'_上锁_'"></i>
+											   :title="item.FLockStatus?'_开锁_':'_上锁_'"></i>
 
-												<div class="text-center">
-													<img  v-if="item.attitude!=0" :src="'/static/img/pose/pose'+item.attitude+'.png'">
-												</div>
-											</el-popover>
-										</td>
-										<td width="10%">{{item.time}}</td>
-										<td width="5%">
-											<i class="img-icon" :class="{'green-light':item.locationType,'red-light':!item.locationType}" :title="item.locationType?'_定位_':'_不定位_'"></i>
-										</td>
-										<td width="10%">{{item.speed}}</td>
-										<td width="10%">{{item.mileage}}</td>
-										<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
+											<div class="text-center">
+												<img v-if="item.attitude!=0"
+													 :src="'/static/img/pose/pose'+item.attitude+'.png'">
+											</div>
+										</el-popover>
+									</td>
+									<td width="10%">{{item.time}}</td>
+									<td width="5%">
+										<i class="img-icon"
+										   :class="{'green-light':item.locationType,'red-light':!item.locationType}"
+										   :title="item.locationType?'_定位_':'_不定位_'"></i>
+									</td>
+									<td width="10%">{{item.speed}}</td>
+									<td width="10%">{{item.mileage}}</td>
+									<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
 											<span v-show="item.address!='_获取位置_'" class="text-nowrap-165"
 												  :title="item.address">{{item.address}}</span>
 											<span v-show="item.address=='_获取位置_'" @click="getAddress(item)"
 												  class="text-blue hover-underline cursor-pointer">{{item.address}}</span>
-										</td>
-										<!--电子锁系统-->
-										<!--<td v-if="systemID==2" width="15%" :class="{'text-red':item.couplingStatus!=1}"></td>-->
-										<!--电子锁系统-->
+									</td>
+									<!--电子锁系统-->
+									<!--<td v-if="systemID==2" width="15%" :class="{'text-red':item.couplingStatus!=1}"></td>-->
+									<!--电子锁系统-->
 
-										<td width="10%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
-											{{item.batteryPercent}}
-										</td>
-										<td width="10%">
-											<a @click="showCarInfo(item.FVehicleGUID)" class="img-icon monitor-icon icon-info" title="查看详情"></a>&nbsp;&nbsp;
-											<a v-if="remoteUnlockLimits==1" class="img-icon monitor-icon icon-key" title="开锁" @click="sendLink({	tabsText: '_远程开锁_',router: 'remoteUnlock'},item.ID)"></a>
-										</td>
+									<td width="10%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
+										{{item.batteryPercent}}
+									</td>
+									<td width="10%">
+										<a @click="showCarInfo(item.FVehicleGUID)"
+										   class="img-icon monitor-icon icon-info" title="查看详情"></a>&nbsp;&nbsp;
+										<a v-if="remoteUnlockLimits==1" class="img-icon monitor-icon icon-key"
+										   title="开锁"
+										   @click="sendLink({	tabsText: '_远程开锁_',router: 'remoteUnlock'},item.ID)"></a>
+									</td>
 
-									</tr>
-									<!--冷链系统-->
-									<tr v-if="systemID==3" v-for="(item,index) in filterCarName">
-										<td width="5%" class="text-black">{{index+1}}</td>
-										<td width="10%" @click="showCarPlace(filterCarName,index)"
-											class="hover-underline cursor-pointer"
-											:class="{'list-active':item.active,
+								</tr>
+								<!--冷链系统-->
+								<tr v-if="systemID==3" v-for="(item,index) in filterCarName">
+									<td width="5%" class="text-black">{{index+1}}</td>
+									<td width="10%" @click="showCarPlace(filterCarName,index)"
+										class="hover-underline cursor-pointer"
+										:class="{'list-active':item.active,
 												'text-red':item.type==3,
 												'text-grey':item.alarmOffLine==1&&item.type!=3,
 												'text-green':item.alarmOffLine!=1&&item.speed>0&&item.type!=3,
 												'text-yellow':item.alarmOffLine!=1&&item.speed==0&&item.type!=3}">
-											{{item.name}}
-										</td>
-										<td width="15%">{{item.time}}</td>
-										<td width="5%">
-											<i class="img-icon" :class="{'green-light':item.locationType,'red-light':!item.locationType}" :title="item.locationType?'_定位_':'_不定位_'"></i>
-										</td>
-										<td width="25%" class="text-left">
-											<p v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length==0" class="text-center">--</p>
-											<el-popover v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length!=0"
-														placement="top-start"
-														width="460"
-														offset="350"
-														popper-class="popover-box"
-														trigger="hover">
-												<p slot="reference" class="cursor-pointer">&nbsp;&nbsp;
-													<!--
-																										<span v-show="!item.alarmTemperature"
-																											  class="alarmTemperature text-green">_正常_</span>
-																										<span v-show="item.alarmTemperature" class="alarmTemperature text-red">_异常_</span>
-													-->
-													<span v-for="(item1,index) in item.coldChainEquipment" v-show="item1.ID!=null"
+										{{item.name}}
+									</td>
+									<td width="15%">{{item.time}}</td>
+									<td width="5%">
+										<i class="img-icon"
+										   :class="{'green-light':item.locationType,'red-light':!item.locationType}"
+										   :title="item.locationType?'_定位_':'_不定位_'"></i>
+									</td>
+									<td width="25%" class="text-left">
+										<p v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length==0"
+										   class="text-center">--</p>
+										<el-popover
+											v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length!=0"
+											placement="top-start"
+											width="460"
+											offset="350"
+											popper-class="popover-box"
+											trigger="hover">
+											<p slot="reference" class="cursor-pointer">&nbsp;&nbsp;
+												<!--
+																									<span v-show="!item.alarmTemperature"
+																										  class="alarmTemperature text-green">_正常_</span>
+																									<span v-show="item.alarmTemperature" class="alarmTemperature text-red">_异常_</span>
+												-->
+													<span v-for="(item1,index) in item.coldChainEquipment"
+														  v-show="item1.ID!=null"
 														  :class="{'text-red':item1.temAlarm==1}">
 														<i class="tire">{{index+1}}</i>{{item1.tem}}&nbsp;℃
 													</span>
-												</p>
-												<div>
-													<table class="popover-table" width="100%">
-														<thead>
-														<tr>
-															<th width="10%">_序号_</th>
-															<th width="20%">_温度_(℃)</th>
-															<th width="20%">_湿度_(%)</th>
-															<th width="20%">_时间_</th>
-															<th width="30%">ID</th>
-														</tr>
-														</thead>
-														<tbody>
-														<tr v-for="(value,index) in  item.coldChainEquipment" v-show="value.ID!=null">
-															<td align="center">{{index+1}}</td>
-															<td align="center">{{value.tem}}</td>
-															<td align="center">{{value.hum}}</td>
-															<td align="center" width="30%">{{value.time==''?'--':value.time}}</td>
-															<td align="center">{{value.ID}}</td>
-														</tr>
-														</tbody>
+											</p>
+											<div>
+												<table class="popover-table" width="100%">
+													<thead>
+													<tr>
+														<th width="10%">_序号_</th>
+														<th width="20%">_温度_(℃)</th>
+														<th width="20%">_湿度_(%)</th>
+														<th width="20%">_时间_</th>
+														<th width="30%">ID</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr v-for="(value,index) in  item.coldChainEquipment"
+														v-show="value.ID!=null">
+														<td align="center">{{index+1}}</td>
+														<td align="center">{{value.tem}}</td>
+														<td align="center">{{value.hum}}</td>
+														<td align="center" width="30%">
+															{{value.time==''?'--':value.time}}
+														</td>
+														<td align="center">{{value.ID}}</td>
+													</tr>
+													</tbody>
 
-													</table>
-													<div class="popover-img img-tem"></div>
-												</div>
+												</table>
+												<div class="popover-img img-tem"></div>
+											</div>
 
 
-											</el-popover>
-										</td>
+										</el-popover>
+									</td>
 
-										<td width="5%">{{item.speed}}</td>
-										<td width="10%">{{item.mileage}}</td>
-										<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
-											{{item.batteryPercent}}
-										</td>
+									<td width="5%">{{item.speed}}</td>
+									<td width="10%">{{item.mileage}}</td>
+									<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
+										{{item.batteryPercent}}
+									</td>
 
-										<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
+									<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
 											<span v-show="item.address!='_获取位置_'" class="text-nowrap-165"
 												  :title="item.address">{{item.address}}</span>
 											<span v-show="item.address=='_获取位置_'" @click="getAddress(item)"
 												  class="text-blue hover-underline cursor-pointer">{{item.address}}</span>
-										</td>
-										<td width="5%">
-											<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info" title="查看详情"></a>
-										</td>
+									</td>
+									<td width="5%">
+										<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info"
+										   title="查看详情"></a>
+									</td>
 
-									</tr>
-									<!--车队系统-->
-									<tr v-if="systemID==4" v-for="(item,index) in filterCarName">
-										<td width="5%" class="text-black">{{index+1}}</td>
-										<td width="10%" @click="showCarPlace(filterCarName,index)"
-											class="hover-underline cursor-pointer"
-											:class="{'list-active':item.active,
+								</tr>
+								<!--车队系统-->
+								<tr v-if="systemID==4" v-for="(item,index) in filterCarName">
+									<td width="5%" class="text-black">{{index+1}}</td>
+									<td width="10%" @click="showCarPlace(filterCarName,index)"
+										class="hover-underline cursor-pointer"
+										:class="{'list-active':item.active,
 												'text-red':item.type==3,
 												'text-grey':item.alarmOffLine==1&&item.type!=3,
 												'text-green':item.alarmOffLine!=1&&item.speed>0&&item.type!=3,
 												'text-yellow':item.alarmOffLine!=1&&item.speed==0&&item.type!=3}">
-											{{item.name}}
-										</td>
-										<td width="15%">{{item.time}}</td>
-										<td width="5%">
-											<i class="img-icon" :class="{'green-light':item.locationType,'red-light':!item.locationType}" :title="item.locationType?'_定位_':'_不定位_'"></i>
-										</td>
-										<td width="10%">
-											<span v-show="item.fuelValue.length==0">--</span>
+										{{item.name}}
+									</td>
+									<td width="15%">{{item.time}}</td>
+									<td width="5%">
+										<i class="img-icon"
+										   :class="{'green-light':item.locationType,'red-light':!item.locationType}"
+										   :title="item.locationType?'_定位_':'_不定位_'"></i>
+									</td>
+									<td width="10%">
+										<span v-show="item.fuelValue.length==0">--</span>
 											<span v-for="obj in item.fuelValue">
 												<i class="tire" v-show="item.fuelValue.length!=1 && obj.number!=1">{{obj.number}}</i>{{obj.value}}&nbsp;
 											</span>
-										</td>
-										<td width="15%" class="text-left">
-											<p v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length==0" class="text-center">--</p>
-											<el-popover v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length!=0"
-														placement="top-start"
-														width="460"
-														offset="350"
-														popper-class="popover-box"
-														trigger="hover">
-												<p slot="reference" class="cursor-pointer">&nbsp;&nbsp;
-													<!--
-														<span v-show="!item.alarmTemperature"
-															  class="alarmTemperature text-green">_正常_</span>
-														<span v-show="item.alarmTemperature" class="alarmTemperature text-red">_异常_</span>
-													-->
-													<span v-for="(item1,index) in item.coldChainEquipment" v-show="item1.ID!=null"
+									</td>
+									<td width="15%" class="text-left">
+										<p v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length==0"
+										   class="text-center">--</p>
+										<el-popover
+											v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length!=0"
+											placement="top-start"
+											width="460"
+											offset="350"
+											popper-class="popover-box"
+											trigger="hover">
+											<p slot="reference" class="cursor-pointer">&nbsp;&nbsp;
+												<!--
+													<span v-show="!item.alarmTemperature"
+														  class="alarmTemperature text-green">_正常_</span>
+													<span v-show="item.alarmTemperature" class="alarmTemperature text-red">_异常_</span>
+												-->
+													<span v-for="(item1,index) in item.coldChainEquipment"
+														  v-show="item1.ID!=null"
 														  :class="{'text-red':item1.temAlarm==1}">
 														<i class="tire">{{index+1}}</i>{{item1.tem}}&nbsp;℃
 													</span>
-												</p>
-												<div>
-													<table class="popover-table" width="100%">
-														<thead>
-														<tr>
-															<th width="10%">_序号_</th>
-															<th width="20%">_温度_(℃)</th>
-															<th width="20%">_湿度_(%)</th>
-															<th width="20%">_时间_</th>
-															<th width="30%">ID</th>
-														</tr>
-														</thead>
-														<tbody>
-														<tr v-for="(value,index) in  item.coldChainEquipment" v-show="value.ID!=null">
-															<td align="center">{{index+1}}</td>
-															<td align="center">{{value.tem}}</td>
-															<td align="center">{{value.hum}}</td>
-															<td align="center" width="30%">{{value.time==''?'--':value.time}}</td>
-															<td align="center">{{value.ID}}</td>
-														</tr>
-														</tbody>
+											</p>
+											<div>
+												<table class="popover-table" width="100%">
+													<thead>
+													<tr>
+														<th width="10%">_序号_</th>
+														<th width="20%">_温度_(℃)</th>
+														<th width="20%">_湿度_(%)</th>
+														<th width="20%">_时间_</th>
+														<th width="30%">ID</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr v-for="(value,index) in  item.coldChainEquipment"
+														v-show="value.ID!=null">
+														<td align="center">{{index+1}}</td>
+														<td align="center">{{value.tem}}</td>
+														<td align="center">{{value.hum}}</td>
+														<td align="center" width="30%">
+															{{value.time==''?'--':value.time}}
+														</td>
+														<td align="center">{{value.ID}}</td>
+													</tr>
+													</tbody>
 
-													</table>
-													<div class="popover-img img-tem"></div>
-												</div>
+												</table>
+												<div class="popover-img img-tem"></div>
+											</div>
 
 
-											</el-popover>
-										</td>
+										</el-popover>
+									</td>
 
-										<td width="5%">{{item.speed}}</td>
-										<td width="5%">{{item.mileage}}</td>
-										<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
-											{{item.batteryPercent}}
-										</td>
-										<td width="20%" :class="{'text-left':item.address!='_获取位置_'}">
+									<td width="5%">{{item.speed}}</td>
+									<td width="5%">{{item.mileage}}</td>
+									<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
+										{{item.batteryPercent}}
+									</td>
+									<td width="20%" :class="{'text-left':item.address!='_获取位置_'}">
 											<span v-show="item.address!='_获取位置_'" class="text-nowrap-165"
 												  :title="item.address">{{item.address}}</span>
 											<span v-show="item.address=='_获取位置_'" @click="getAddress(item)"
 												  class="text-blue hover-underline cursor-pointer">{{item.address}}</span>
-										</td>
-										<td width="5%">
-											<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info" title="查看详情"></a>
-										</td>
+									</td>
+									<td width="5%">
+										<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info"
+										   title="查看详情"></a>
+									</td>
 
-									</tr>
+								</tr>
 								</tbody>
 								<!--报警部分-->
 								<tbody v-show="carDataType>=4">
-									<!--接甩挂系统-->
-									<tr v-if="systemID==1" v-for="(item,index) in filterCarName">
-										<td width="5%" class="text-black">{{index+1}}</td>
-										<td width="10%" @click="showCarPlace(filterCarName,index)"
-											class="hover-underline cursor-pointer text-red"
-											:class="{'list-active':item.active,'':item.active}">{{item.name}}
-										</td>
-										<td width="10%">
+								<!--接甩挂系统-->
+								<tr v-if="systemID==1" v-for="(item,index) in filterCarName">
+									<td width="5%" class="text-black">{{index+1}}</td>
+									<td width="10%" @click="showCarPlace(filterCarName,index)"
+										class="hover-underline cursor-pointer text-red"
+										:class="{'list-active':item.active,'':item.active}">{{item.name}}
+									</td>
+									<td width="10%">
 											<span v-if="item.alarmFatigue==1"
 												  class="monitor-icon img-icon icon-alarmFatigue"
 												  data-toggle="tooltip" data-placement="left" title="_疲劳驾驶_"></span>
 											<span v-if="item.alarmOverSpeed==1"
 												  class="img-icon monitor-icon icon-alarmOverSpeed"
 												  data-toggle="tooltip" data-placement="left" title="_超速报警_"></span>
-											<span v-if="item.FAlarmLowPower==1" class="img-icon monitor-icon icon-alarmLowBattery"
-											      data-toggle="tooltip" data-placement="left" title="_低电量报警_"></span>
-											<!--
-											<span v-if="item.alarmOffsetRoad==1" class="img-icon monitor-icon icon-alarmOffsetRoad"
-												  data-toggle="tooltip" data-placement="left" title="_道路偏移_"></span>
-											-->
-										</td>
-										<td width="15%">{{item.time}}</td>
-										<td width="5%">
-											<i class="img-icon" :class="{'green-light':item.locationType,'red-light':!item.locationType}" :title="item.locationType?'_定位_':'_不定位_'"></i>
-										</td>
+											<span v-if="item.FAlarmLowPower==1"
+												  class="img-icon monitor-icon icon-alarmLowBattery"
+												  data-toggle="tooltip" data-placement="left" title="_低电量报警_"></span>
+										<!--
+										<span v-if="item.alarmOffsetRoad==1" class="img-icon monitor-icon icon-alarmOffsetRoad"
+											  data-toggle="tooltip" data-placement="left" title="_道路偏移_"></span>
+										-->
+									</td>
+									<td width="15%">{{item.time}}</td>
+									<td width="5%">
+										<i class="img-icon"
+										   :class="{'green-light':item.locationType,'red-light':!item.locationType}"
+										   :title="item.locationType?'_定位_':'_不定位_'"></i>
+									</td>
 
-										<td v-if="systemID==1" width="10%">
-											<span v-show="item.couplingStatus!=1 && item.couplingStatus!=0">--</span>
-											<i v-show="item.couplingStatus==1 || item.couplingStatus==0" class="img-icon"
-											   :class="{'online-coupling':item.couplingStatus==1,'online-unCoupling':item.couplingStatus==0}"
-											   :title="item.couplingStatusTitle"></i>
+									<td v-if="systemID==1" width="10%">
+										<span v-show="item.couplingStatus!=1 && item.couplingStatus!=0">--</span>
+										<i v-show="item.couplingStatus==1 || item.couplingStatus==0" class="img-icon"
+										   :class="{'online-coupling':item.couplingStatus==1,'online-unCoupling':item.couplingStatus==0}"
+										   :title="item.couplingStatusTitle"></i>
 
-										</td>
-										<td width="5%">
-											<span v-show="item.isHaveTyreContent==0">--</span>
-											<el-popover v-show="item.isHaveTyreContent==1"
-														placement="top"
-														width="460"
-														offset="350"
-														popper-class="popover-box"
-														trigger="click">
+									</td>
+									<td width="5%">
+										<span v-show="item.isHaveTyreContent==0">--</span>
+										<el-popover v-show="item.isHaveTyreContent==1"
+													placement="top"
+													width="460"
+													offset="350"
+													popper-class="popover-box"
+													trigger="click">
 
-												<span  @click="getCarTireData(item)" slot="reference">
+												<span @click="getCarTireData(item)" slot="reference">
 													<i class="img-icon carChoiceList-icon ChoiceListIcon-3a cursor-pointer"></i>
 												</span>
 
-												<div style="min-height:400px">
-													<table  class="popover-table" width="100%">
-														<thead>
-														<tr>
-															<th colspan="2">_设备_ID:{{item.tireData.ID}}</th>
-															<th colspan="2">_上传时间_:{{item.tireData.time}}</th>
-														</tr>
-														<tr>
-															<th width="10%">_序号_</th>
-															<th width="20%">_胎压_(Bar)</th>
-															<th width="20%">_胎温_(℃)</th>
-															<th width="50%">_状态_</th>
-														</tr>
-														</thead>
-														<tbody>
-														<tr v-for="value in item.tireData.data">
-															<td align="center">{{value.N}}</td>
-															<td align="center">{{value.P}}</td>
-															<td align="center">{{value.T}}</td>
-															<td align="left">
-																&nbsp;&nbsp;{{value.state}}
-															</td>
-														</tr>
-														</tbody>
-													</table>
-													<div class="popover-img img-tire"></div>
-												</div>
+											<div style="min-height:400px">
+												<table class="popover-table" width="100%">
+													<thead>
+													<tr>
+														<th colspan="2">_设备_ID:{{item.tireData.ID}}</th>
+														<th colspan="2">_上传时间_:{{item.tireData.time}}</th>
+													</tr>
+													<tr>
+														<th width="10%">_序号_</th>
+														<th width="20%">_胎压_(Bar)</th>
+														<th width="20%">_胎温_(℃)</th>
+														<th width="50%">_状态_</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr v-for="value in item.tireData.data">
+														<td align="center">{{value.N}}</td>
+														<td align="center">{{value.P}}</td>
+														<td align="center">{{value.T}}</td>
+														<td align="left">
+															&nbsp;&nbsp;{{value.state}}
+														</td>
+													</tr>
+													</tbody>
+												</table>
+												<div class="popover-img img-tire"></div>
+											</div>
 
 
-											</el-popover>
+										</el-popover>
 
-										</td>
-										<td width="5%">{{item.speed}}</td>
-										<td width="5%">{{item.mileage}}</td>
-										<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">{{item.batteryPercent}}</td>
-										<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
+									</td>
+									<td width="5%">{{item.speed}}</td>
+									<td width="5%">{{item.mileage}}</td>
+									<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
+										{{item.batteryPercent}}
+									</td>
+									<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
 											<span v-show="item.address!='_获取位置_'" class="text-nowrap-165"
 												  :title="item.address">{{item.address}}</span>
 											<span v-show="item.address=='_获取位置_'" @click="getAddress(item)"
 												  class="text-blue hover-underline cursor-pointer">{{item.address}}</span>
-										</td>
+									</td>
 
-										<td width="10%">
-											<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info" title="查看详情"></a>
-										</td>
+									<td width="10%">
+										<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info"
+										   title="查看详情"></a>
+									</td>
 
-									</tr>
-									<!--电子锁系统-->
-									<tr v-if="systemID==2" v-for="(item,index) in filterCarName">
-										<td width="5%" class="text-black">{{index+1}}</td>
-										<td width="10%" @click="showCarPlace(filterCarName,index)" class="hover-underline cursor-pointer text-red"  :class="{'list-active':item.active,'':item.active}">{{item.ID}}</td>
-										<td width="10%">
-											<a href="javascript:" data-toggle="modal" data-target="#modal" @click="beforebingVehicle(item.ID,item.FAssetGUID,item.name,item.FVehicleGUID)">
-												<i class="fa fa-unlink" style="font-size: 14px;margin-right: 10px" title="绑定车辆"></i>
-											</a>
-											<span >{{item.name}}</span>
-										</td>
-										<td width="5%">
-											<span v-if="item.attitude==null">--</span>
-											<el-popover v-if="item.attitude!=null"
-														placement="top-start"
-														width="460"
-														offset="350"
-														popper-class="popover-box"
-														trigger="hover"
-														:disabled="item.attitude==0">
+								</tr>
+								<!--电子锁系统-->
+								<tr v-if="systemID==2" v-for="(item,index) in filterCarName">
+									<td width="5%" class="text-black">{{index+1}}</td>
+									<td width="10%" @click="showCarPlace(filterCarName,index)"
+										class="hover-underline cursor-pointer text-red"
+										:class="{'list-active':item.active,'':item.active}">{{item.ID}}
+									</td>
+									<td width="10%" align="left">&nbsp;&nbsp;
+										<a href="javascript:" data-toggle="modal" data-target="#modal"
+										   @click="beforebingVehicle(item)">
+											<i class="fa fa-unlink" style="font-size: 14px;margin-right: 10px"
+											   title="绑定车辆"></i>
+										</a>
+										<span>{{item.name}}</span>
+									</td>
+									<td width="5%">
+										<span v-if="item.attitude==null">--</span>
+										<el-popover v-if="item.attitude!=null"
+													placement="top-start"
+													width="460"
+													offset="350"
+													popper-class="popover-box"
+													trigger="hover"
+													:disabled="item.attitude==0">
 
 
-												<i slot="reference" class="img-icon lock-state" :class="{'normal-lock':!item.FLockStatus&&item.attitude<=1,
+											<i slot="reference" class="img-icon lock-state" :class="{'normal-lock':!item.FLockStatus&&item.attitude<=1,
 													'abnormal-lock':!item.FLockStatus&&item.attitude>1,
 													'normal-unlock':item.FLockStatus&&item.attitude<=1,
 													'abnormal-unlock':item.FLockStatus&&item.attitude>1}"></i>
 
-												<div class="text-center">
-													<img v-if="item.attitude!=0" :src="'/static/img/pose/pose'+item.attitude+'.png'">
-												</div>
-											</el-popover>
-										</td>
-										<td width="10%">
+											<div class="text-center">
+												<img v-if="item.attitude!=0"
+													 :src="'/static/img/pose/pose'+item.attitude+'.png'">
+											</div>
+										</el-popover>
+									</td>
+									<td width="10%">
 											<span v-if="item.alarmOverSpeed==1"
 												  class="img-icon monitor-icon icon-alarmOverSpeed"
 												  data-toggle="tooltip" data-placement="left" title="_超速报警_"></span>
-											<span v-if="item.alarmFLockRope==1" class="img-icon monitor-icon icon-alarmFLockRope"
-												data-toggle="tooltip" data-placement="left" title="_绳索异常_"></span>
-											<span v-if="item.FAlarmLowPower==1" class="img-icon monitor-icon icon-alarmLowBattery"
-												data-toggle="tooltip" data-placement="left" title="_低电量报警_"></span>
-											<span v-if="item.unCoverBack==1" class="img-icon monitor-icon icon-unCoverBack"
+											<span v-if="item.alarmFLockRope==1"
+												  class="img-icon monitor-icon icon-alarmFLockRope"
+												  data-toggle="tooltip" data-placement="left" title="_绳索异常_"></span>
+											<span v-if="item.FAlarmLowPower==1"
+												  class="img-icon monitor-icon icon-alarmLowBattery"
+												  data-toggle="tooltip" data-placement="left" title="_低电量报警_"></span>
+											<span v-if="item.unCoverBack==1"
+												  class="img-icon monitor-icon icon-unCoverBack"
 												  data-toggle="tooltip" data-placement="left" title="_后盖报警_"></span>
-											<span v-if="item.longTimeOpened==1" class="img-icon monitor-icon icon-longTimeOpened"
+											<span v-if="item.longTimeOpened==1"
+												  class="img-icon monitor-icon icon-longTimeOpened"
 												  data-toggle="tooltip" data-placement="left" title="_长时间未锁_"></span>
-											<span v-if="item.fivePasswordError==1" class="img-icon monitor-icon icon-fivePasswordError"
+											<span v-if="item.fivePasswordError==1"
+												  class="img-icon monitor-icon icon-fivePasswordError"
 												  data-toggle="tooltip" data-placement="left" title="_五次连续错误_"></span>
-											<span v-if="item.illegalCard==1" class="img-icon monitor-icon icon-illegalCard"
+											<span v-if="item.illegalCard==1"
+												  class="img-icon monitor-icon icon-illegalCard"
 												  data-toggle="tooltip" data-placement="left" title="_刷非法卡_"></span>
-											<span v-if="item.forbiddenAreaOpen==1" class="img-icon monitor-icon icon-forbiddenAreaOpen"
+											<span v-if="item.forbiddenAreaOpen==1"
+												  class="img-icon monitor-icon icon-forbiddenAreaOpen"
 												  data-toggle="tooltip" data-placement="left" title="_禁区开锁_"></span>
 
-										</td>
-										<td width="10%">{{item.time}}</td>
-										<td width="5%">
-											<i class="img-icon" :class="{'green-light':item.locationType,'red-light':!item.locationType}" :title="item.locationType?'_定位_':'_不定位_'"></i>
-										</td>
-										<td width="5%">{{item.speed}}</td>
-										<td width="10%">{{item.mileage}}</td>
-										<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
+									</td>
+									<td width="10%">{{item.time}}</td>
+									<td width="5%">
+										<i class="img-icon"
+										   :class="{'green-light':item.locationType,'red-light':!item.locationType}"
+										   :title="item.locationType?'_定位_':'_不定位_'"></i>
+									</td>
+									<td width="5%">{{item.speed}}</td>
+									<td width="10%">{{item.mileage}}</td>
+									<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
 											<span v-show="item.address!='_获取位置_'" class="text-nowrap-165"
 												  :title="item.address">{{item.address}}</span>
 											<span v-show="item.address=='_获取位置_'" @click="getAddress(item)"
 												  class="text-blue hover-underline cursor-pointer">{{item.address}}</span>
-										</td>
-										<!--电子锁系统-->
-										<!--<td v-if="systemID==2" width="15%" :class="{'text-red':item.couplingStatus!=1}"></td>-->
-										<!--电子锁系统-->
+									</td>
+									<!--电子锁系统-->
+									<!--<td v-if="systemID==2" width="15%" :class="{'text-red':item.couplingStatus!=1}"></td>-->
+									<!--电子锁系统-->
 
-										<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
-											{{item.batteryPercent}}
-										</td>
-										<td width="10%">
-											<a @click="showCarInfo(item.FVehicleGUID)" class="img-icon monitor-icon icon-info" title="查看详情"></a>&nbsp;&nbsp;
-											<a v-if="remoteUnlockLimits==1" class="img-icon monitor-icon icon-key" title="开锁" @click="sendLink({tabsText:'_远程开锁_',router:'remoteUnlock'},item.ID)"></a>
-										</td>
+									<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
+										{{item.batteryPercent}}
+									</td>
+									<td width="10%">
+										<a @click="showCarInfo(item.FVehicleGUID)"
+										   class="img-icon monitor-icon icon-info" title="查看详情"></a>&nbsp;&nbsp;
+										<a v-if="remoteUnlockLimits==1" class="img-icon monitor-icon icon-key"
+										   title="开锁"
+										   @click="sendLink({tabsText:'_远程开锁_',router:'remoteUnlock'},item.ID)"></a>
+									</td>
 
-									</tr>
-									<!--冷链系统-->
-									<tr v-if="systemID==3" v-for="(item,index) in filterCarName">
-										<td width="5%" class="text-black">{{index+1}}</td>
-										<td width="10%" @click="showCarPlace(filterCarName,index)"
-											class="hover-underline cursor-pointer text-red"
-											:class="{'list-active':item.active,'':item.active}">{{item.name}}
-										</td>
-										<td width="10%">
+								</tr>
+								<!--冷链系统-->
+								<tr v-if="systemID==3" v-for="(item,index) in filterCarName">
+									<td width="5%" class="text-black">{{index+1}}</td>
+									<td width="10%" @click="showCarPlace(filterCarName,index)"
+										class="hover-underline cursor-pointer text-red"
+										:class="{'list-active':item.active,'':item.active}">{{item.name}}
+									</td>
+									<td width="10%">
 											<span v-if="item.alarmFatigue==1"
 												  class="monitor-icon img-icon icon-alarmFatigue"
 												  data-toggle="tooltip" data-placement="left" title="_疲劳驾驶_"></span>
@@ -858,84 +914,93 @@
 											<span v-if="item.FAlarmLowPower==1"
 												  class="img-icon monitor-icon icon-alarmLowBattery"
 												  data-toggle="tooltip" data-placement="left" title="_低电量报警_"></span>
-										</td>
-										<td width="10%">{{item.time}}</td>
-										<td width="5%">
-											<i class="img-icon" :class="{'green-light':item.locationType,'red-light':!item.locationType}" :title="item.locationType?'_定位_':'_不定位_'"></i>
-										</td>
-										<td width="25%" class="text-left">
-											<p v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length==0" class="text-center">--</p>
-											<el-popover v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length!=0"
-														placement="top"
-														width="460"
-														offset="60"
-														popper-class="popover-box"
-														trigger="hover">
-												<p slot="reference" class="cursor-pointer">&nbsp;&nbsp;
-													<!--
-																										<span v-show="!item.alarmTemperature"
-																											  class="alarmTemperature text-green">_正常_</span>
-																										<span v-show="item.alarmTemperature" class="alarmTemperature text-red">_异常_</span>
-													-->
-													<span v-for="(item1,index) in item.coldChainEquipment" v-show="item1.ID!=null"
+									</td>
+									<td width="10%">{{item.time}}</td>
+									<td width="5%">
+										<i class="img-icon"
+										   :class="{'green-light':item.locationType,'red-light':!item.locationType}"
+										   :title="item.locationType?'_定位_':'_不定位_'"></i>
+									</td>
+									<td width="25%" class="text-left">
+										<p v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length==0"
+										   class="text-center">--</p>
+										<el-popover
+											v-show="item.coldChainEquipment!=null && item.coldChainEquipment.length!=0"
+											placement="top"
+											width="460"
+											offset="60"
+											popper-class="popover-box"
+											trigger="hover">
+											<p slot="reference" class="cursor-pointer">&nbsp;&nbsp;
+												<!--
+																									<span v-show="!item.alarmTemperature"
+																										  class="alarmTemperature text-green">_正常_</span>
+																									<span v-show="item.alarmTemperature" class="alarmTemperature text-red">_异常_</span>
+												-->
+													<span v-for="(item1,index) in item.coldChainEquipment"
+														  v-show="item1.ID!=null"
 														  :class="{'text-red':item1.temAlarm==1}">
 														<i class="tire">{{index+1}}</i>{{item1.tem}}&nbsp;℃
 													</span>
-												</p>
-												<div>
-													<table class="popover-table" width="100%">
-														<thead>
-														<tr>
-															<th width="10%">_序号_</th>
-															<th width="20%">_温度_(℃)</th>
-															<th width="20%">_湿度_(%)</th>
-															<th width="20%">_时间_</th>
-															<th width="30%">ID</th>
-														</tr>
-														</thead>
-														<tbody>
-														<tr v-for="(value,index) in  item.coldChainEquipment" v-show="value.ID!=null">
-															<td align="center">{{index+1}}</td>
-															<td align="center">{{value.tem}}</td>
-															<td align="center">{{value.hum}}</td>
-															<td align="center" width="30%">{{value.time==''?'--':value.time}}</td>
-															<td align="center">{{value.ID}}</td>
-														</tr>
-														</tbody>
+											</p>
+											<div>
+												<table class="popover-table" width="100%">
+													<thead>
+													<tr>
+														<th width="10%">_序号_</th>
+														<th width="20%">_温度_(℃)</th>
+														<th width="20%">_湿度_(%)</th>
+														<th width="20%">_时间_</th>
+														<th width="30%">ID</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr v-for="(value,index) in  item.coldChainEquipment"
+														v-show="value.ID!=null">
+														<td align="center">{{index+1}}</td>
+														<td align="center">{{value.tem}}</td>
+														<td align="center">{{value.hum}}</td>
+														<td align="center" width="30%">
+															{{value.time==''?'--':value.time}}
+														</td>
+														<td align="center">{{value.ID}}</td>
+													</tr>
+													</tbody>
 
-													</table>
-													<div class="popover-img img-tem"></div>
-												</div>
+												</table>
+												<div class="popover-img img-tem"></div>
+											</div>
 
 
-											</el-popover>
+										</el-popover>
 
-										</td>
+									</td>
 
-										<td width="5%">{{item.speed}}</td>
-										<td width="5%">{{item.mileage}}</td>
-										<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
-											{{item.batteryPercent}}
-										</td>
-										<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
+									<td width="5%">{{item.speed}}</td>
+									<td width="5%">{{item.mileage}}</td>
+									<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
+										{{item.batteryPercent}}
+									</td>
+									<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
 											<span v-show="item.address!='_获取位置_'" class="text-nowrap-165"
 												  :title="item.address">{{item.address}}</span>
 											<span v-show="item.address=='_获取位置_'" @click="getAddress(item)"
 												  class="text-blue hover-underline cursor-pointer">{{item.address}}</span>
-										</td>
-										<td width="5%">
-											<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info" title="查看详情"></a>
-										</td>
+									</td>
+									<td width="5%">
+										<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info"
+										   title="查看详情"></a>
+									</td>
 
-									</tr>
-									<!--车队系统-->
-									<tr v-if="systemID==4" v-for="(item,index) in filterCarName">
-										<td width="5%" class="text-black">{{index+1}}</td>
-										<td width="10%" @click="showCarPlace(filterCarName,index)"
-											class="hover-underline cursor-pointer text-red"
-											:class="{'list-active':item.active,'':item.active}">{{item.name}}
-										</td>
-										<td width="10%">
+								</tr>
+								<!--车队系统-->
+								<tr v-if="systemID==4" v-for="(item,index) in filterCarName">
+									<td width="5%" class="text-black">{{index+1}}</td>
+									<td width="10%" @click="showCarPlace(filterCarName,index)"
+										class="hover-underline cursor-pointer text-red"
+										:class="{'list-active':item.active,'':item.active}">{{item.name}}
+									</td>
+									<td width="10%">
 												<span v-if="item.alarmFatigue==1"
 													  class="monitor-icon img-icon icon-alarmFatigue"
 													  data-toggle="tooltip" data-placement="left" title="_疲劳驾驶_"></span>
@@ -947,37 +1012,42 @@
 													  data-toggle="tooltip" data-placement="left" title="_温度报警_"></span>
 												<span v-if="item.FAlarmLowPower==1"
 													  class="img-icon monitor-icon icon-alarmLowBattery"
-													  data-toggle="tooltip" data-placement="left" title="_低电量报警_"></span>
-											<!--
-											<span v-if="item.alarmOffsetRoad==1" class="img-icon monitor-icon icon-alarmOffsetRoad"
-												  data-toggle="tooltip" data-placement="left" title="_道路偏移_"></span>
-											-->
-										</td>
-										<td width="15%">{{item.time}}</td>
-										<td width="5%">
-											<i class="img-icon" :class="{'green-light':item.locationType,'red-light':!item.locationType}" :title="item.locationType?'_定位_':'_不定位_'"></i>
-										</td>
-										<td width="5%">{{item.speed}}</td>
-										<td width="5%">{{item.mileage}}</td>
-										<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
+													  data-toggle="tooltip" data-placement="left"
+													  title="_低电量报警_"></span>
+										<!--
+										<span v-if="item.alarmOffsetRoad==1" class="img-icon monitor-icon icon-alarmOffsetRoad"
+											  data-toggle="tooltip" data-placement="left" title="_道路偏移_"></span>
+										-->
+									</td>
+									<td width="15%">{{item.time}}</td>
+									<td width="5%">
+										<i class="img-icon"
+										   :class="{'green-light':item.locationType,'red-light':!item.locationType}"
+										   :title="item.locationType?'_定位_':'_不定位_'"></i>
+									</td>
+									<td width="5%">{{item.speed}}</td>
+									<td width="5%">{{item.mileage}}</td>
+									<td width="15%" :class="{'text-left':item.address!='_获取位置_'}">
 											<span v-show="item.address!='_获取位置_'" class="text-nowrap-165"
 												  :title="item.address">{{item.address}}</span>
 											<span v-show="item.address=='_获取位置_'" @click="getAddress(item)"
 												  class="text-blue hover-underline cursor-pointer">{{item.address}}</span>
-										</td>
-										<td width="20%">
-											<span v-show="item.fuelValue.length==0">--</span>
+									</td>
+									<td width="20%">
+										<span v-show="item.fuelValue.length==0">--</span>
 											<span v-for="obj in item.fuelValue">
 												<i class="tire" v-show="item.fuelValue.length!=1 && obj.number!=1">{{obj.number}}</i>{{obj.value}}&nbsp;
 											</span>
-										</td>
-										<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">{{item.batteryPercent}}
-										</td>
-										<td width="5%">
-											<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info" title="查看详情"></a>
-										</td>
+									</td>
+									<td width="5%" :class="{'text-red':item.batteryPercent<=LowPowerThreshold}">
+										{{item.batteryPercent}}
+									</td>
+									<td width="5%">
+										<a @click="showCarInfo(item.ID)" class="img-icon monitor-icon icon-info"
+										   title="查看详情"></a>
+									</td>
 
-									</tr>
+								</tr>
 								</tbody>
 								</tbody>
 							</table>
@@ -1014,7 +1084,7 @@
 				isShowSearchCarName: false,//下部车辆搜索开关
 				//初始化显示工具栏
 				mapToolShow: true,
-				LowPowerThreshold:this.$store.state.LowPowerThreshold , //低电量阈值  单位%
+				LowPowerThreshold: this.$store.state.LowPowerThreshold, //低电量阈值  单位%
 				//是否显示区域检索
 				isShowAreaSearch: true,
 				//初始城市
@@ -1027,14 +1097,13 @@
 				conut: 0,
 				filterText: '',
 				filterText1: '',
-				//终端号
-				FAssetID: null,
-				//终端GUID
-				FAssetGUID: null,
-				//车牌号
-				FVehicleName: null,
+				choiceAssetData:null,
+				FAssetID: null,//终端号
+				FAssetGUID: null, //终端GUID
+				FVehicleName: null, //车牌号
 				FVehicleGUID: null,
-				//电子锁结束
+				/************电子锁结束***************/
+
 				//树形图选项
 				options: {
 					showCheckbox: true, //是否支持多选
@@ -1060,16 +1129,16 @@
 				alarmTemperature: [], //温度报警
 				alarmFLockRope: [],   //绳锁是否异常
 				FAlarmLowPower: [],   //低电量报警
-				unCoverBack:[],        //后盖打开
-		        longTimeOpened:[],     //长时间未锁
-				fivePasswordError:[],   //五次输入错误
-				illegalCard:[],         //刷非法卡
-				forbiddenAreaOpen:[],   //禁区开锁
+				unCoverBack: [],        //后盖打开
+				longTimeOpened: [],     //长时间未锁
+				fivePasswordError: [],   //五次输入错误
+				illegalCard: [],         //刷非法卡
+				forbiddenAreaOpen: [],   //禁区开锁
 				searchCarName: "",      //搜索车辆关键字
 				intervalGetData: null,  //定时器对象
 				carIdArr: [],            //车辆id数组
 				carDataType: 0,          //记录下部菜单列表选择项类型
-				remoteUnlockLimits:this.$store.state.remoteUnlockLimits   //开锁权限
+				remoteUnlockLimits: this.$store.state.remoteUnlockLimits   //开锁权限
 
 
 			}
@@ -1084,7 +1153,7 @@
 		mounted(){
 			this.systemID = this.$store.state.choiceSystemID;
 
-			setTimeout(function() {
+			setTimeout(function () {
 				_this.adjustPage();
 				_this.$refs.map.initMap();
 			}, 30)
@@ -1129,14 +1198,14 @@
 			}
 			//加载树形图
 			this.loadTreeData();
-      let oldValue=_this.$store.state.mapLocksData;
-      setInterval(function () {
-        if(_this.$store.state.mapLocksData!=oldValue){
-          console.log(_this.$store.state.mapLocksData)
-          _this.lockData=_this.$store.state.mapLocksData;
-          oldValue=_this.$store.state.mapLocksData;
-        }
-      },1000)
+			let oldValue = _this.$store.state.mapLocksData;
+			setInterval(function () {
+				if (_this.$store.state.mapLocksData != oldValue) {
+					console.log(_this.$store.state.mapLocksData)
+					_this.lockData = _this.$store.state.mapLocksData;
+					oldValue = _this.$store.state.mapLocksData;
+				}
+			}, 1000)
 
 		},
 		updated(){
@@ -1212,43 +1281,33 @@
 			},
 			//调取车辆信息
 			loadTreeData(refresh) {
-/*
-				if (this.systemID == 2) {
-					_this.lockData = _this.deepCopy(_this.$store.state.mapLocksData);
-					console.log(_this.lockData);
-					_this.data = _this.deepCopy(_this.$store.state.allCarsData);
-					_this.allCarsArr = _this.$store.state.allLockList;
-				} else {
-
-				}
-*/
 
 				if (this.$store.state.allCarsList != null && refresh != true) {
 					setData()
 				} else {
 					_this.$store.commit('getAllCarsData', setData);
-
 				}
 				function setData() {
 					//console.log(2222)
 					if (_this.$store.state.allCarsList.length == 0) {
 						_this.$refs.map.showError("_暂无车辆数据_");
 					}
-					if (_this.systemID == 2){
-						_this.allCarsArr = _this.$store.state.allLockList;
-						_this.noLockVehicle = _this.$store.state.noLockVehicle;
-					}else {
-						_this.allCarsArr = _this.$store.state.allCarsList;
+					if (_this.systemID == 2) {
+						_this.allCarsArr = _this.$store.state.allLockList;   //原始锁列表
+						_this.lockData = _this.deepCopy(_this.$store.state.mapLocksData);  //地图树形 锁列表
+						_this.noLockVehicle = _this.$store.state.noLockVehicle;  //未绑定车辆的 锁列表
+					} else {
+						_this.allCarsArr = _this.$store.state.allCarsList;   //原始车辆列表
+						_this.treeData = _this.deepCopy(_this.$store.state.allCarsData); //地图树形 车辆列表
 					}
 
-					_this.treeData = _this.deepCopy(_this.$store.state.allCarsData);
-
 				}
+
 				//清空数据或地图
 				this.handlecheckedChange([]);
 			},
-			
-			
+
+
 			//开启关闭右侧车辆选择
 			showCarList(){
 				this.isShowSelectCarList = !this.isShowSelectCarList;
@@ -1257,9 +1316,9 @@
 			showCarNameSearch(){
 				this.isShowSearchCarName = !this.isShowSearchCarName;
 				if (!this.isShowSearchCarName) this.searchCarName = "";
-				setTimeout(function(){
+				setTimeout(function () {
 					$("#searchCarName").focus();
-				},200)
+				}, 200)
 			},
 			//选中车辆请求车辆数据
 			handlecheckedChange(cars){
@@ -1285,14 +1344,15 @@
 					_this.alarmOverSpeed = [];
 					_this.alarmOffsetRoad = [];
 					_this.alarmTemperature = [];
-					_this.unCoverBack=[];
-					_this.longTimeOpened=[];
-					_this.fivePasswordError=[];
-					_this.illegalCard=[];
-					_this.forbiddenAreaOpen=[];
+					_this.unCoverBack = [];
+					_this.longTimeOpened = [];
+					_this.fivePasswordError = [];
+					_this.illegalCard = [];
+					_this.forbiddenAreaOpen = [];
 					_this.showDataList = [];
 					return
-				};
+				}
+				;
 
 				_this.getCarIdData(function () {
 					_this.openSubMenu();
@@ -1308,49 +1368,49 @@
 
 			},
 			//请求选中车辆数据（电子锁）
-/*
-			getCheckChange(){
-				_this.carIdArr = [];
-				let nodeArr = this.$refs.tree2.getCheckedNodes();
-				for (let i = 0; i < nodeArr.length; i++) {
-					if (nodeArr[i].FAssetID.indexOf("@") === -1) {
-						_this.carIdArr.push(nodeArr[i].FAssetGUID);
-					}
-				}
-				//删除已绘制的点
-				_this.$refs.map.deleteLately();
-				if (_this.intervalGetData != null) {
-					_this.closeSubMenu();
-					clearInterval(_this.intervalGetData);
-				}
-				if (_this.carIdArr.length === 0) {
-					_this.allCarData = [];
-					_this.stopCarData = [];
-					_this.runCarData = [];
-					_this.alarmCarData = [];
-					_this.outlineCarData = [];
-					_this.alarmFatigue = [];
-					_this.alarmOverSpeed = [];
-					_this.alarmOffsetRoad = [];
-					_this.alarmTemperature = [];
-					_this.showDataList = [];
-					return
-				}
+			/*
+			 getCheckChange(){
+			 _this.carIdArr = [];
+			 let nodeArr = this.$refs.tree2.getCheckedNodes();
+			 for (let i = 0; i < nodeArr.length; i++) {
+			 if (nodeArr[i].FAssetID.indexOf("@") === -1) {
+			 _this.carIdArr.push(nodeArr[i].FAssetGUID);
+			 }
+			 }
+			 //删除已绘制的点
+			 _this.$refs.map.deleteLately();
+			 if (_this.intervalGetData != null) {
+			 _this.closeSubMenu();
+			 clearInterval(_this.intervalGetData);
+			 }
+			 if (_this.carIdArr.length === 0) {
+			 _this.allCarData = [];
+			 _this.stopCarData = [];
+			 _this.runCarData = [];
+			 _this.alarmCarData = [];
+			 _this.outlineCarData = [];
+			 _this.alarmFatigue = [];
+			 _this.alarmOverSpeed = [];
+			 _this.alarmOffsetRoad = [];
+			 _this.alarmTemperature = [];
+			 _this.showDataList = [];
+			 return
+			 }
 
-				_this.getCarIdData(function () {
-					_this.openSubMenu();
-					setTimeout(function () {
-						_this.$refs.map.showAllMap()
-					}, 200)
+			 _this.getCarIdData(function () {
+			 _this.openSubMenu();
+			 setTimeout(function () {
+			 _this.$refs.map.showAllMap()
+			 }, 200)
 
-				});
+			 });
 
-				_this.intervalGetData = setInterval(function () {
-					_this.getCarIdData();
-				}, _this.refreshInterva)
+			 _this.intervalGetData = setInterval(function () {
+			 _this.getCarIdData();
+			 }, _this.refreshInterva)
 
-			},
-*/
+			 },
+			 */
 
 			//在当前选择车辆的范围内 根据开锁和上锁状态 过滤设备
 			handleLockStatus(status){
@@ -1364,7 +1424,7 @@
 				fn.timeoutId = setTimeout(function () {
 					fn.call(null);
 				}, 500);
-                //this.throttle(_this.save,null,500,this.value)
+				//this.throttle(_this.save,null,500,this.value)
 			},
 			//请求车辆数据
 			getCarIdData(callback){
@@ -1373,17 +1433,17 @@
 				let action;
 				let GUIDs;
 				let num = 0;
-				switch (this.systemID){
-				    case 1:
+				switch (this.systemID) {
+					case 1:
 						url = '/web/Trailer/Trailer_LBS';
 						action = 'QueryLBSMonitorListByFVehicleGUIDs';
 						GUIDs = 'FVehicleGUIDs'
-				        break;
-				    case 2:
+						break;
+					case 2:
 						url = '/web/Lock/Lock_LBS';
 						action = 'QueryLBSMonitorListByFAssetGUIDs';
 						GUIDs = 'FAssetGUIDs'
-				        break;
+						break;
 					case 3:
 						url = '/web/ColdChain/ColdChain_LBS';
 						action = 'QueryLBSMonitorListByFVehicleGUIDs';
@@ -1418,11 +1478,11 @@
 						_this.alarmTemperature = [];
 						_this.alarmFLockRope = [];
 						_this.FAlarmLowPower = [];
-						_this.unCoverBack=[];
-						_this.longTimeOpened=[];
-						_this.fivePasswordError=[];
-						_this.illegalCard=[];
-						_this.forbiddenAreaOpen=[];
+						_this.unCoverBack = [];
+						_this.longTimeOpened = [];
+						_this.fivePasswordError = [];
+						_this.illegalCard = [];
+						_this.forbiddenAreaOpen = [];
 						_this.showDataList = [];
 						if (res.Result == 104) {
 							_this.$refs.map.showError("_登录超时_，_5秒后返回登录页面_");
@@ -1462,7 +1522,7 @@
 										FVehicleGUID: oResData.FVehicleGUID,
 										assetID: oResData.FAssetID,
 										FAssetGUID: oResData.FAssetGUID,
-										name: oResData.FVehicleName==null?"--":oResData.FVehicleName,
+										name: oResData.FVehicleName == null ? "--" : oResData.FVehicleName,
 										company: oResData.FShortName,
 										operateType: oResData.FOperateType,
 										time: _this.parseGMT(oResData.FGPSDateTime),
@@ -1471,7 +1531,7 @@
 										direction: oResData.FDirection,
 										mileage: oResData.FMileage,
 										address: "_定位中_",
-										batteryPercent:oResData.FBatteryPercent> 100 ? "_充电中_" :oResData.FBatteryPercent,
+										batteryPercent: oResData.FBatteryPercent > 100 ? "_充电中_" : oResData.FBatteryPercent,
 										alarmOffLine: oResData.FAlarmOffLine, //离线状态
 										FLockStatus: oResData.FLockStatus,    //锁状态
 
@@ -1480,20 +1540,20 @@
 										alarmFLockRope: oResData.FLockRope,         //绳索异常
 										FAlarmLowPower: oResData.FAlarmLowPower,      //低电量
 
-										unCoverBack: oResData.FUnCoverBack ,          //后盖打开
-										longTimeOpened: oResData.FLongTimeOpened ,       //长时间未锁
-										fivePasswordError: oResData.FFivePasswordError ,    //五次输入错误
-										illegalCard: oResData.FIllegalCard ,          //刷非法卡
-										forbiddenAreaOpen: oResData.FForbiddenAreaOpen ,    //禁区开锁
+										unCoverBack: oResData.FUnCoverBack,          //后盖打开
+										longTimeOpened: oResData.FLongTimeOpened,       //长时间未锁
+										fivePasswordError: oResData.FFivePasswordError,    //五次输入错误
+										illegalCard: oResData.FIllegalCard,          //刷非法卡
+										forbiddenAreaOpen: oResData.FForbiddenAreaOpen,    //禁区开锁
 
-										attitude:0,        //锁姿态  无姿态数据为null 数据格式 字符串 x轴，y轴，z轴
+										attitude: 0,        //锁姿态  无姿态数据为null 数据格式 字符串 x轴，y轴，z轴
 										coldChainEquipment: [],
 										active: false,
 										type: 0,
-										locationType:oResData.FLocationType==0?false:true  //定位状态
+										locationType: oResData.FLocationType == 0 ? false : true  //定位状态
 									}
-									if(oResData.FAttitude!=null && oResData.FAttitude!=''){
-										oCarPonitData.attitude=_this.parseLockPose(oResData.FAttitude);
+									if (oResData.FAttitude != null && oResData.FAttitude != '') {
+										oCarPonitData.attitude = _this.parseLockPose(oResData.FAttitude);
 									}
 
 									//实时车辆状态 筛选优先顺序  离线>报警>停车>运行
@@ -1555,7 +1615,7 @@
 									if (_this.allCarData[i].point.lng != 0 && _this.allCarData[i].point.lat != 0) {
 
 										setTimeout(function () {
-											_this.geocoder(_this.$store.state.mapType, _this.allCarData[i].point, _this.allCarData[i],"address")
+											_this.geocoder(_this.$store.state.mapType, _this.allCarData[i].point, _this.allCarData[i], "address")
 										}, i * 30)
 
 									} else {
@@ -1573,7 +1633,7 @@
 												ID: obj.FAssetID,
 												assetID: obj.FAssetID,
 												FVehicleGUID: obj.FVehicleGUID,
-												name: obj.FVehicleName==null?"--":obj.FVehicleName,
+												name: obj.FVehicleName == null ? "--" : obj.FVehicleName,
 												company: obj.FShortName,
 												operateType: "--",
 												time: "--",
@@ -1585,7 +1645,7 @@
 												couplingStatus: 3,
 												containerStatus: "",
 												alarmTPMS: 3,
-												batteryPercent:"--",
+												batteryPercent: "--",
 												isAlarm: "",
 												alarmFatigue: "",
 												alarmOverSpeed: "",
@@ -1594,7 +1654,7 @@
 												alarmOffsetRoad: "",
 												active: false,
 												type: 4,
-												attitude:null,
+												attitude: null,
 												coldChainEquipment: []
 											}
 											_this.allCarData.push(outlineCar);
@@ -1634,8 +1694,8 @@
 										address: "_获取位置_",
 										couplingStatus: oResData.FCouplingStatus,
 										containerStatus: oResData.FContainerStatus == 1 ? "_有厢_" : "_无厢_",
-										isHaveTyreContent:parseInt(oResData.FIsHaveTyreContent),  //0 无   1有
-										batteryPercent: oResData.FBatteryPercent> 100 ? "_充电中_" :oResData.FBatteryPercent,
+										isHaveTyreContent: parseInt(oResData.FIsHaveTyreContent),  //0 无   1有
+										batteryPercent: oResData.FBatteryPercent > 100 ? "_充电中_" : oResData.FBatteryPercent,
 										isAlarm: oResData.FIsAlarm,
 										alarmFatigue: oResData.FAlarmFatigue,
 										alarmOverSpeed: oResData.FAlarmOverSpeed,
@@ -1645,27 +1705,27 @@
 										alarmTemperature: false,
 										active: false,
 										type: 0,
-										locationType:oResData.FLocationType==0?false:true,
+										locationType: oResData.FLocationType == 0 ? false : true,
 										coldChainEquipment: [], //温度数据
-										fuelValue:[], //油位数据
-										tireData:{ //轮胎数据
-											ID:null,
-											time:null,
-											data:[]
+										fuelValue: [], //油位数据
+										tireData: { //轮胎数据
+											ID: null,
+											time: null,
+											data: []
 										},
-										couplingStatusTitle:""  //接甩挂状态的title
+										couplingStatusTitle: ""  //接甩挂状态的title
 									}
 
 									//分析接甩挂title
-									if(oCarPonitData.alarmOffLine){
-										oCarPonitData.couplingStatusTitle+="_离线_&"
-									}else{
-										oCarPonitData.couplingStatusTitle+="_在线_&"
+									if (oCarPonitData.alarmOffLine) {
+										oCarPonitData.couplingStatusTitle += "_离线_&"
+									} else {
+										oCarPonitData.couplingStatusTitle += "_在线_&"
 									}
-									if(oCarPonitData.couplingStatus){
-										oCarPonitData.couplingStatusTitle+="_接挂_"
-									}else{
-										oCarPonitData.couplingStatusTitle+="_甩挂_"
+									if (oCarPonitData.couplingStatus) {
+										oCarPonitData.couplingStatusTitle += "_接挂_"
+									} else {
+										oCarPonitData.couplingStatusTitle += "_甩挂_"
 									}
 
 									//冷链系统
@@ -1674,14 +1734,14 @@
 										let cce = oCarPonitData.coldChainEquipment;
 
 										for (let j = 1; j < 5; j++) {
-											if(oResData['FSensorID' + j]!=null){
+											if (oResData['FSensorID' + j] != null) {
 												let cceItem = {
 													number: j,
 													ID: oResData['FSensorID' + j],
 													tem: oResData['FTemperature' + j],
 													temAlarm: oResData['FTemperature' + j + 'Alarm'],
 													hum: oResData['FHumidity' + j],
-													time: _this.parseGMT(oResData['FSensor' + j+'GPSDateTime']),
+													time: _this.parseGMT(oResData['FSensor' + j + 'GPSDateTime']),
 												}
 												if (cceItem.temAlarm == 1) oCarPonitData.alarmTemperature = true;
 												cce.push(cceItem)
@@ -1694,10 +1754,10 @@
 									if (_this.systemID == 4) {
 										let fuelValue = oCarPonitData.fuelValue;
 										for (let j = 1; j < 4; j++) {
-											if(oResData['FFuelValue' + j]!=-1){
+											if (oResData['FFuelValue' + j] != -1) {
 												let item = {
 													number: j,
-													value:oResData['FFuelValue' + j]
+													value: oResData['FFuelValue' + j]
 												}
 												fuelValue.push(item)
 											}
@@ -1711,7 +1771,7 @@
 										oCarPonitData.type = 4;
 										_this.outlineCarData.push(oCarPonitData)
 									}
-									else if (oCarPonitData.alarmOverSpeed==1 || oCarPonitData.alarmTemperature==1 || oCarPonitData.alarmFatigue==1 ) {
+									else if (oCarPonitData.alarmOverSpeed == 1 || oCarPonitData.alarmTemperature == 1 || oCarPonitData.alarmFatigue == 1) {
 
 										oCarPonitData.type = 3;
 										_this.alarmCarData.push(oCarPonitData);
@@ -1752,7 +1812,7 @@
 									if (_this.allCarData[i].point.lng != 0 && _this.allCarData[i].point.lat != 0) {
 
 										setTimeout(function () {
-											_this.geocoder(_this.$store.state.mapType, _this.allCarData[i].point, _this.allCarData[i],"address")
+											_this.geocoder(_this.$store.state.mapType, _this.allCarData[i].point, _this.allCarData[i], "address")
 										}, i * 30)
 
 									} else {
@@ -1783,7 +1843,7 @@
 												containerStatus: "",
 												alarmTPMS: 3,
 												batteryPercent: "--",
-												isHaveTyreContent:0,  //0 无   1有
+												isHaveTyreContent: 0,  //0 无   1有
 												alarmFatigue: "",
 												alarmOverSpeed: "",
 												alarmOffsetRoad: "",
@@ -1792,12 +1852,12 @@
 												active: false,
 												type: 4,
 												coldChainEquipment: [],
-												locationType:false,
-												fuelValue:[],
-												tireData:{ //轮胎数据
-													ID:null,
-													time:null,
-													data:[]
+												locationType: false,
+												fuelValue: [],
+												tireData: { //轮胎数据
+													ID: null,
+													time: null,
+													data: []
 												}
 											}
 											_this.allCarData.push(outlineCar);
@@ -1940,20 +2000,30 @@
 				}
 			},
 			//点击绑定图标
-			beforebingVehicle(FAssetID, FAssetGUID, FVehicleName, FVehicleGUID){
-				console.log(FAssetID, FAssetGUID, FVehicleName, FVehicleGUID)
-				_this.FAssetGUID = FAssetGUID;
-				_this.FVehicleGUID = FVehicleGUID;
-				_this.FAssetID = FAssetID;
-				_this.FVehicleName = FVehicleName;
+			beforebingVehicle(data){
+				console.log(data)
+				_this.choiceAssetData=data;
+				_this.FVehicleGUID=null;
+				_this.FAssetGUID = data.FAssetGUID;
+				_this.FAssetID = data.assetID;
+				_this.FVehicleName = data.name;
 			},
 			bingVehicle(){
-				let postData={
-					FTokenID:_this.$store.state.FTokenID,
-					FAction:"UpdateBoundingVehicle",
-					FAssetGUID:_this.FAssetGUID,
-					FVehicleGUID:_this.FVehicleGUID,
-					FVersion:"1.0.0"
+
+				if(_this.FVehicleGUID==null){
+					_this.$message({
+						message: '_请选择车辆_',
+						type: 'warning'
+					})
+					return
+				}
+
+				let postData = {
+					FTokenID: _this.$store.state.FTokenID,
+					FAction: "UpdateBoundingVehicle",
+					FAssetGUID: _this.FAssetGUID,
+					FVehicleGUID: _this.FVehicleGUID,
+					FVersion: "1.0.0"
 				}
 				$.ajax({
 					"url": "/web/Lock/Lock_SmartLock",
@@ -1962,9 +2032,38 @@
 					"type": "post",
 					"dataType": "json",
 					"contentType": "application/json; charset=utf-8",
-					"data":JSON.stringify(postData) ,
+					"data": JSON.stringify(postData),
 					success: function (json) {
 						console.log(json)
+						if(json.Result==200){
+							$("#modal").modal("hide");
+							_this.$message({
+								message: '_修改成功_',
+								type: 'success'
+							});
+							//更新下部列表数据
+							_this.choiceAssetData.name=_this.FVehicleName;
+							_this.choiceAssetData.FVehicleGUID=_this.FVehicleGUID;
+							//更新树形图数据
+
+							_this.lockData[0].children.map(function(item,index){
+								if(item.id==_this.FAssetGUID){
+									item.subLabel=_this.FVehicleName;
+									item.FVehicleGUID=_this.FVehicleGUID;
+									return;
+								}
+							})
+
+
+
+
+
+						}else{
+							_this.$message({
+								message: '_修改失败_',
+								type: 'error'
+							})
+						}
 					},
 					error: function () {
 
@@ -1997,109 +2096,123 @@
 							return
 						}
 						if (res.Result == 200) {
-							if(res.FObject.length==0) return;
-							let json=JSON.parse(res.FObject[0].FTyreContent);
+							if (res.FObject.length == 0) return;
+							let json = JSON.parse(res.FObject[0].FTyreContent);
 							console.log(json);
-							carData.tireData.ID=res.FObject[0].FAssetID;
-							carData.tireData.time=_this.parseGMT(res.FObject[0].FGPSDateTime);
+							carData.tireData.ID = res.FObject[0].FAssetID;
+							carData.tireData.time = _this.parseGMT(res.FObject[0].FGPSDateTime);
 							for (var i = 0; i < json.length; i++) {
 								let obj = json[i];
-								let arr=obj.S.split(',');
-								let state="";
-								if(arr.indexOf('LB')!=-1) state+="_低电量_; ";
+								let arr = obj.S.split(',');
+								let state = "";
+								if (arr.indexOf('LB') != -1) state += "_低电量_; ";
 								//if(arr.indexOf('BN')!=-1) state+="_电量正常_";
-								if(arr.indexOf('PN')!=-1) state+="_胎压正常_; ";
-								if(arr.indexOf('HP')!=-1) state+="_高胎压_; ";
-								if(arr.indexOf('LP')!=-1) state+="_低胎压_; ";
+								if (arr.indexOf('PN') != -1) state += "_胎压正常_; ";
+								if (arr.indexOf('HP') != -1) state += "_高胎压_; ";
+								if (arr.indexOf('LP') != -1) state += "_低胎压_; ";
 
-								if(arr.indexOf('LE')!=-1) state+="_急泄漏_; ";
-								if(arr.indexOf('L')!=-1) state+="_泄露_; ";
+								if (arr.indexOf('LE') != -1) state += "_急泄漏_; ";
+								if (arr.indexOf('L') != -1) state += "_泄露_; ";
 
-								if(arr.indexOf('TN')!=-1) state+="_胎温正常_; ";
-								if(arr.indexOf('HT')!=-1) state+="_高胎温_; ";
-								obj.state=state
+								if (arr.indexOf('TN') != -1) state += "_胎温正常_; ";
+								if (arr.indexOf('HT') != -1) state += "_高胎温_; ";
+								obj.state = state
 							}
 
-							carData.tireData.data=json;
+							carData.tireData.data = json;
 						}
 					})
 
 			},
 			handleNodeClick(data){
-				var nodeArr = this.$refs.tree2.getCheckedNodes();
-				if (nodeArr.indexOf(data) == -1) {
-					this.$refs.tree2.setChecked(data, true, true)
-				} else {
-					this.$refs.tree2.setChecked(data, false, true)
-				}
+				if (data.id.indexOf("@B") != -1 || data.id.indexOf("@A") != -1 || data.id.indexOf("@C") != -1) return;
+
+				this.FVehicleName = data.label;
+				this.FVehicleGUID = data.id;
+
 			},
 
-
-
-/*
-			//旧 车辆列表
 			renderContent(h, { node, data, store }){
 				return (
-					<span
-						//class={{"green":!data.FAlarmOffLine&&data.FAssetID.indexOf("@A")==-1&&data.FAssetID.indexOf("@B")==-1&&data.FAssetID.indexOf("@C")==-1}}
-			>
-				<i class="fa fa-home icon fa-lg" v-show={data.FAssetID.indexOf("@A")!=-1}></i>
-				<i class="fa fa-lock icon" v-show={data.FAssetID.indexOf("@A")==-1&&!data.FLockStatus}></i>
-				<i class="fa fa-unlock icon" v-show={data.FAssetID.indexOf("@A")==-1&&data.FLockStatus}></i>
-				<span v-show={data.FAssetID.indexOf("@A")!=-1}>{data.FVehicleName}</span>
-				<span v-show={data.FAssetID.indexOf("@A")==-1}>{data.FAssetID}</span>
-				<span v-show={data.FAssetID.indexOf("@A")!=-1} style="font-weight:bold">[{data.count}]</span>
-				<span style="margin-left:10px" v-show={data.FAssetID.indexOf("@A")==-1}>({data.FVehicleName})
-				</span>
-			</span>
-			)
-			},
-			handleNodeClick(data){
-				var nodeArr = this.$refs.tree2.getCheckedNodes();
-				if (nodeArr.indexOf(data) == -1) {
-					this.$refs.tree2.setChecked(data, true, true)
-				} else {
-					this.$refs.tree2.setChecked(data, false, true)
-				}
-			},
-			//请求开锁或未开锁的数据
-			handleLockStatus(status){
-				var nodeArr = this.$refs.tree2.getCheckedNodes();
-				if (!status) {
-					$.each(_this.lockData[0].children, function (index, item) {
-						if (!item.FLockStatus) {
-							if (nodeArr.indexOf(item) == -1) {
-								_this.$refs.tree2.setChecked(item, true, true)
-							}
-						} else {
-							if (nodeArr.indexOf(item) !== -1) {
-								_this.$refs.tree2.setChecked(item, false, true)
-							}
-						}
-					})
-				} else {
-					$.each(_this.lockData[0].children, function (index, item) {
-						if (item.FLockStatus) {
-							if (nodeArr.indexOf(item) == -1) {
-								_this.$refs.tree2.setChecked(item, true, true)
-							}
-						} else {
-							if (nodeArr.indexOf(item) !== -1) {
-								_this.$refs.tree2.setChecked(item, false, true)
-							}
-						}
-					})
-				}
-			},
-			//树形过滤
-			filterNode(value, data) {
-				if (!value) return true;
-				if (data.FAssetID) {
-					return data.FAssetID.indexOf(value) !== -1;
-				}
+					<span>
+						<i class="fa fa-home icon fa-lg" v-show={data.id.indexOf("@A")!=-1}></i>
+						<i class="fa fa-building icon" v-show={data.id.indexOf("@B")!=-1}></i>
+						<i class="fa fa-flag-checkered icon" v-show={data.id.indexOf("@C")!=-1}></i>
+						<i class="fa fa-truck icon"
+						   v-show={data.id.indexOf("@B")==-1&data.id.indexOf("@A")==-1&data.id.indexOf("@C")==-1}></i>
+						{node.label}
+						<span style="margin-left:10px"
+							  v-show={data.id.indexOf("@B")!=-1||data.id.indexOf("@A")!=-1||data.id.indexOf("@C")!=-1}>
+							({data.count})
+						</span>
+					</span>
+				)
 			},
 
-*/
+			/*
+			 //旧 车辆列表
+			 renderContent(h, { node, data, store }){
+			 return (
+			 <span
+			 //class={{"green":!data.FAlarmOffLine&&data.FAssetID.indexOf("@A")==-1&&data.FAssetID.indexOf("@B")==-1&&data.FAssetID.indexOf("@C")==-1}}
+			 >
+			 <i class="fa fa-home icon fa-lg" v-show={data.FAssetID.indexOf("@A")!=-1}></i>
+			 <i class="fa fa-lock icon" v-show={data.FAssetID.indexOf("@A")==-1&&!data.FLockStatus}></i>
+			 <i class="fa fa-unlock icon" v-show={data.FAssetID.indexOf("@A")==-1&&data.FLockStatus}></i>
+			 <span v-show={data.FAssetID.indexOf("@A")!=-1}>{data.FVehicleName}</span>
+			 <span v-show={data.FAssetID.indexOf("@A")==-1}>{data.FAssetID}</span>
+			 <span v-show={data.FAssetID.indexOf("@A")!=-1} style="font-weight:bold">[{data.count}]</span>
+			 <span style="margin-left:10px" v-show={data.FAssetID.indexOf("@A")==-1}>({data.FVehicleName})
+			 </span>
+			 </span>
+			 )
+			 },
+			 handleNodeClick(data){
+			 var nodeArr = this.$refs.tree2.getCheckedNodes();
+			 if (nodeArr.indexOf(data) == -1) {
+			 this.$refs.tree2.setChecked(data, true, true)
+			 } else {
+			 this.$refs.tree2.setChecked(data, false, true)
+			 }
+			 },
+			 //请求开锁或未开锁的数据
+			 handleLockStatus(status){
+			 var nodeArr = this.$refs.tree2.getCheckedNodes();
+			 if (!status) {
+			 $.each(_this.lockData[0].children, function (index, item) {
+			 if (!item.FLockStatus) {
+			 if (nodeArr.indexOf(item) == -1) {
+			 _this.$refs.tree2.setChecked(item, true, true)
+			 }
+			 } else {
+			 if (nodeArr.indexOf(item) !== -1) {
+			 _this.$refs.tree2.setChecked(item, false, true)
+			 }
+			 }
+			 })
+			 } else {
+			 $.each(_this.lockData[0].children, function (index, item) {
+			 if (item.FLockStatus) {
+			 if (nodeArr.indexOf(item) == -1) {
+			 _this.$refs.tree2.setChecked(item, true, true)
+			 }
+			 } else {
+			 if (nodeArr.indexOf(item) !== -1) {
+			 _this.$refs.tree2.setChecked(item, false, true)
+			 }
+			 }
+			 })
+			 }
+			 },
+			 //树形过滤
+			 filterNode(value, data) {
+			 if (!value) return true;
+			 if (data.FAssetID) {
+			 return data.FAssetID.indexOf(value) !== -1;
+			 }
+			 },
+
+			 */
 			//车辆绑定列表 过滤规则
 			filterNode1(value, data) {
 				if (!value) {
@@ -2115,10 +2228,10 @@
 				var name = this.searchCarName;
 				var shoppingList = this.showDataList;
 				return shoppingList.filter(function (item) {
-					let a=false,b=false;
-					if(item.name!='' && item.name!=null && item.name.toUpperCase().indexOf(name.toUpperCase()) != -1) a=true;
-					if(item.assetID && item.assetID.toUpperCase().indexOf(name.toUpperCase()) != -1) b=true;
-					if(a || b) return true;
+					let a = false, b = false;
+					if (item.name != '' && item.name != null && item.name.toUpperCase().indexOf(name.toUpperCase()) != -1) a = true;
+					if (item.assetID && item.assetID.toUpperCase().indexOf(name.toUpperCase()) != -1) b = true;
+					if (a || b) return true;
 				});
 			}
 		},
@@ -2135,8 +2248,8 @@
 			if (_this.intervalGetData != null) clearInterval(_this.intervalGetData);
 		},
 		directives: {
-			dragY:{
-				inserted:function (el, binding) {
+			dragY: {
+				inserted: function (el, binding) {
 					var oDiv = el;
 
 					if (binding.value.length != 0) {
@@ -2179,20 +2292,20 @@
 								//targetDiv.style.left = x + 'px';   //确定DIV的  left值 和top值
 								//targetDiv.style.top = y + 'px';
 
-								let newHeight=fatherDiv.offsetHeight-y;
+								let newHeight = fatherDiv.offsetHeight - y;
 								//console.log(fatherDiv.offsetHeight,y)
-								if(y<=$("#map-tool").height()){
+								if (y <= $("#map-tool").height()) {
 									$("#map-tool").hide()
-								}else{
+								} else {
 									$("#map-tool").show()
 								}
 								$("#contentList").height(newHeight + 'px');
-								let h1=$('#myTab').height();
-								let h2=$('#table-header').height();
+								let h1 = $('#myTab').height();
+								let h2 = $('#table-header').height();
 								//console.log(newHeight - h1 - h2);
 								$("#table-wrap").slimScroll({
 									//width: 'auto', //可滚动区域宽度
-									height: newHeight-h1-h2+'px', //可滚动区域高度
+									height: newHeight - h1 - h2 + 'px', //可滚动区域高度
 									size: '10px', //组件宽度
 									color: '#00aff0', //滚动条颜色
 									position: 'right', //组件位置：left/right
@@ -2232,6 +2345,39 @@
 	}
 </script>
 <style scoped>
+	.map-dialog {
+		margin-top:150px;
+		width:500px;
+	}
+
+	.map-dialog .modal-header {
+		background-color:#005fc6;
+	}
+
+	.bingCar {
+		position:absolute;
+		top:150px;
+		width:470px;
+		text-align:center;
+	}
+
+	.bingCar p {
+		line-height:40px;
+	}
+
+	.bingCar .el-icon-warning {
+		font-size:35px;
+		color:#c87f0a;
+	}
+
+	.bingCar button {
+		background:white;
+		border:1px solid #1a70ce;
+		color:#1a70ce;
+		width:120px;
+		height:26px;
+	}
+
 	.text-nowrap-165 {
 		display:block;
 		max-width:320px;
@@ -2241,11 +2387,13 @@
 		overflow:hidden;
 		text-overflow:ellipsis;
 	}
+
 	@media (max-width:1800px) {
 		.text-nowrap-165 {
 			max-width:165px;
 		}
 	}
+
 	@media (min-width:1800px) and (max-width:1920px) {
 		.text-nowrap-165 {
 			max-width:265px;
@@ -2291,21 +2439,27 @@
 	.icon-alarmFLockRope {
 		background-position:-16px -18px;
 	}
+
 	.icon-alarmLowBattery {
 		background-position:-46px -18px;
 	}
+
 	.icon-unCoverBack {
 		background-position:-62px 0px;
 	}
+
 	.icon-longTimeOpened {
 		background-position:-232px 0;
 	}
+
 	.icon-fivePasswordError {
 		background-position:-32px -18px;
 	}
+
 	.icon-illegalCard {
 		background-position:-63px -18px;
 	}
+
 	.icon-forbiddenAreaOpen {
 		background-position:-246px 0;
 	}
@@ -2323,8 +2477,6 @@
 		font-size:14px;
 		background-position:-246px -22px;
 	}
-
-
 
 	#contentList .nav > li a {
 		padding:0 12px 0 17px;
@@ -2366,7 +2518,7 @@
 		background-color:#fff;
 		color:#666;
 		cursor:pointer;
-		white-space: nowrap;
+		white-space:nowrap;
 	}
 
 	.alarmType .monitor-icon {
@@ -2500,40 +2652,45 @@
 		border:3px solid transparent;
 		background:white;
 		color:#005fc6;
-		outline: none;
+		outline:none;
 	}
 
 	.lockBtns .lockBtn {
 		background:#005fc6;
 		border:3px solid transparent;
 		color:white;
-		outline: none;
+		outline:none;
 	}
-	.unlockBtn:focus,.lockBtn:focus{
+
+	.unlockBtn:focus, .lockBtn:focus {
 		border-color:#60ef23;
 	}
-	.online-coupling{
+
+	.online-coupling {
 		display:block;
 		width:64px;
 		height:25px;
 		margin:2px auto;
 		background-position:-200px -38px;
 	}
-	.offline-coupling{
+
+	.offline-coupling {
 		display:block;
 		width:64px;
 		height:25px;
 		margin:2px auto;
 		background-position:-200px -63px;
 	}
-	.online-unCoupling{
+
+	.online-unCoupling {
 		display:block;
 		width:64px;
 		height:25px;
 		margin:2px auto;
 		background-position:-266px -38px;
 	}
-	.offline-unCoupling{
+
+	.offline-unCoupling {
 		display:block;
 		width:64px;
 		height:25px;
@@ -2542,5 +2699,11 @@
 	}
 
 
+</style>
+<style>
+	.map-dialog .el-tree {
+		height:450px;
+		overflow-y:scroll;
+	}
 </style>
 
